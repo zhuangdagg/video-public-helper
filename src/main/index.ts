@@ -1,10 +1,15 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, nativeTheme } from 'electron';
 import path from 'path';
+
+import './handle'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
+// 隐藏原生菜单
+Menu.setApplicationMenu(null);
 
 const createWindow = () => {
   // Create the browser window.

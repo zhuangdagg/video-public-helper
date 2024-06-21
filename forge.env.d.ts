@@ -20,6 +20,7 @@ declare global {
     VITE_DEV_SERVER_URL: `${string}_VITE_DEV_SERVER_URL`;
     VITE_NAME: `${string}_VITE_NAME`;
   }
+
 }
 
 declare module 'vite' {
