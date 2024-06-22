@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:3100",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true
+    }
+  ],
+  "workbench.colorCustomizations": {
+    "titleBar.inactiveBackground": "#00ccff70",
+    "titleBar.activeBackground": "#00ccff80"
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ESNext",
     "module": "commonjs",
@@ -10,9 +11,12 @@
     "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["render/*"],
+      "#/*": ["types/*"]
+    }
   },
-  "files": [
-    "interface.d.ts"
-  ]
+  "exclude": ["dist"]
 }

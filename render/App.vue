@@ -22,7 +22,7 @@ const followSystem = async () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 h1 {
     color: red;
 }
