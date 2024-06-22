@@ -1,29 +1,30 @@
 <template>
-    <h1>hello electron</h1>
-    <p>page support by vue3 </p>
-    <p>page support by vue3 </p>
-    <p>page support by vue3 </p>
-    <button @click="toggleTheme">toggle dark</button>
-    <button @click="followSystem">follow system</button>
+  <ConfigProvider>
+    <Button>ant design btn</Button>
+    <!-- <RouterView /> -->
+  </ConfigProvider>
 </template>
 
 <script setup lang="ts">
+  import { ConfigProvider, Button } from 'ant-design-vue';
 
-const toggleTheme = async () => {
+  //   import { }
+
+  const toggleTheme = async () => {
     const theme = await window.darkMode.toggle();
 
-    console.log({ theme })
-}
+    console.log({ theme });
+  };
 
-const followSystem = async () => {
+  const followSystem = async () => {
     await window.darkMode.system();
 
-    console.log('system')
-}
+    console.log('system');
+  };
 </script>
 
 <style lang="less">
-h1 {
+  h1 {
     color: red;
-}
+  }
 </style>

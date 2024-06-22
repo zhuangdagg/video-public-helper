@@ -1,19 +1,24 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
-import App from './App.vue'
+import App from './App.vue';
 
-import './style/index.less'
+import './style/index.less';
 
 // plugin
-import { setupStore } from '@/store/index'
+import { setupStore } from './store';
+import { setupI18n } from '@/locales/setupI18n';
+import { setupRouter } from './router';
 
-async function bootstrap () {
-    const app = createApp(App)
+async function bootstrap() {
+  const app = createApp(App);
 
-    setupStore(app);
+  setupStore(app);
 
-    app.mount('#app');
+  setupI18n(app);
+
+  setupRouter(app);
+
+  app.mount('#app');
 }
 
 bootstrap();
-
