@@ -59,7 +59,7 @@
   import Modal4 from './Modal4.vue';
   import Modal5 from './Modal5.vue';
   import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
   import { createPrompt } from '@/components/Prompt';
 
   const currentModal = shallowRef<Nullable<ComponentOptions>>(null);

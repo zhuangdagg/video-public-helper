@@ -35,7 +35,7 @@
   import { getBasicColumns, getBasicShortColumns } from './tableData';
   import { useMessage } from '@/hooks/web/useMessage';
   import { demoListApi } from '@/api/demo/table';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
 
   const tableRef = ref<Nullable<TableActionType>>(null);
   const { createMessage } = useMessage();

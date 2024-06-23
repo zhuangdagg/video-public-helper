@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
   import { PageWrapper } from '@/components/Page';
-  import { useRequest } from '@vben/hooks';
+  import { useRequest } from '@/hooks';
   import { testRetry } from '@/api/sys/user';
   import { Card, Col, Row, Space, message } from 'ant-design-vue';
 

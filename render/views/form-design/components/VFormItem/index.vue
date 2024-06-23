@@ -40,7 +40,7 @@
   </Col>
 </template>
 <script lang="ts">
-  import { type Recordable } from '@vben/types';
+  import { type Recordable } from '@/types';
   import { defineComponent, reactive, toRefs, computed, PropType, unref } from 'vue';
   import { componentMap } from '../../core/formItemConfig';
   import { IVFormComponent, IFormConfig } from '../../typings/v-form-component';
@@ -97,18 +97,18 @@
         labelCol = labelCol
           ? labelCol
           : formConfig.layout === 'horizontal'
-            ? formConfig.labelLayout === 'flex'
-              ? { style: `width:${formConfig.labelWidth}px` }
-              : formConfig.labelCol
-            : {};
+          ? formConfig.labelLayout === 'flex'
+            ? { style: `width:${formConfig.labelWidth}px` }
+            : formConfig.labelCol
+          : {};
 
         wrapperCol = wrapperCol
           ? wrapperCol
           : formConfig.layout === 'horizontal'
-            ? formConfig.labelLayout === 'flex'
-              ? { style: 'width:auto;flex:1' }
-              : formConfig.wrapperCol
-            : {};
+          ? formConfig.labelLayout === 'flex'
+            ? { style: 'width:auto;flex:1' }
+            : formConfig.wrapperCol
+          : {};
 
         const style =
           formConfig.layout === 'horizontal' && formConfig.labelLayout === 'flex'

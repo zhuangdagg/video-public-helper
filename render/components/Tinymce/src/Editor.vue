@@ -68,7 +68,7 @@
   import { plugins as defaultPlugins, toolbar as defaultToolbar } from './tinymce';
   import { buildShortUUID } from '@/utils/uuid';
   import { bindHandlers } from './helper';
-  import { onMountedOrActivated } from '@vben/hooks';
+  import { onMountedOrActivated } from '@/hooks';
   import { useDesign } from '@/hooks/web/useDesign';
   import { isNumber } from '@/utils/is';
   import { useLocale } from '@/locales/useLocale';

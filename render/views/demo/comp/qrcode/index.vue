@@ -84,7 +84,7 @@
   import LogoImg from '@/assets/images/logo.png';
   import { CollapseContainer } from '@/components/Container';
   import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
   import { QRCode } from 'ant-design-vue';
 
   const qrCodeUrl = 'https://www.vvbin.cn';

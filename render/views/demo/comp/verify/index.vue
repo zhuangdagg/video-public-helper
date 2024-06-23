@@ -56,7 +56,7 @@
   import { useMessage } from '@/hooks/web/useMessage';
   import { BugOutlined, RightOutlined } from '@ant-design/icons-vue';
   import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
 
   const { createMessage } = useMessage();
   const el1 = ref<Nullable<DragVerifyActionType>>(null);

@@ -23,7 +23,7 @@
   import { ref, unref } from 'vue';
   import { ScrollContainer, ScrollActionType } from '@/components/Container';
   import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
 
   const scrollRef = ref<Nullable<ScrollActionType>>(null);
   const getScroll = () => {

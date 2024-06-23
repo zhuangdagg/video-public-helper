@@ -17,7 +17,7 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { isFunction } from '@/utils/is';
   import { getSlot } from '@/utils/helper/tsxHelper';
-  import { useAttrs } from '@vben/hooks';
+  import { useAttrs } from '@/hooks';
 
   const props = {
     useCollapse: { type: Boolean, default: true },

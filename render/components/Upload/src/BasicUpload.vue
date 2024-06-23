@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
   import { ref, watch, unref, computed, useAttrs } from 'vue';
-  import { Recordable } from '@vben/types';
+  import { Recordable } from '@/types';
   import Icon from '@/components/Icon/Icon.vue';
   import { Tooltip, Space } from 'ant-design-vue';
   import { useModal } from '@/components/Modal';

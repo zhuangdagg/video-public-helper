@@ -63,7 +63,7 @@
   import { Card, Row, Col, Spin } from 'ant-design-vue';
   import { cloneDeep, uniq } from 'lodash-es';
   import { isArray } from '@/utils/is';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
   import { SmileTwoTone, CarryOutOutlined } from '@ant-design/icons-vue';
 
   const asyncTreeRef = ref<Nullable<TreeActionType>>(null);

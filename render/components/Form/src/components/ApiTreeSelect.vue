@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { type Recordable } from '@vben/types';
+  import { type Recordable } from '@/types';
   import { type PropType, computed, watch, ref, onMounted, unref, useAttrs } from 'vue';
   import { TreeSelect } from 'ant-design-vue';
   import { isArray, isFunction } from '@/utils/is';

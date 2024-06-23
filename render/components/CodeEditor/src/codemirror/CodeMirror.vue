@@ -17,8 +17,8 @@
     unref,
     nextTick,
   } from 'vue';
-  import type { Nullable } from '@vben/types';
-  import { useWindowSizeFn } from '@vben/hooks';
+  import type { Nullable } from '@/types';
+  import { useWindowSizeFn } from '@/hooks';
   import { useDebounceFn } from '@vueuse/core';
   import { useAppStore } from '@/store/modules/app';
   import CodeMirror from 'codemirror';

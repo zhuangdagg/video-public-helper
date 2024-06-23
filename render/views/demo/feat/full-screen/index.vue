@@ -31,7 +31,7 @@
   import { useFullscreen } from '@vueuse/core';
 
   import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { type Nullable } from '@/types';
 
   const domRef = ref<Nullable<HTMLElement>>(null);
 
