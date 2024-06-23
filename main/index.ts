@@ -1,5 +1,7 @@
-import { app, BrowserWindow, Menu, ipcMain, nativeTheme } from 'electron';
-import path from 'path';
+import { app, BrowserWindow, Menu, ipcMain, nativeTheme, session } from 'electron';
+import path from 'node:path';
+
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 import './handle';
 
@@ -12,6 +14,10 @@ if (require('electron-squirrel-startup')) {
 Menu.setApplicationMenu(null);
 
 const createWindow = () => {
+  // load extension
+  // session.defaultSession.loadExtension(
+  //   'C:UserszhuangAppDataLocalMicrosoftEdgeUser DataDefaultExtensionsolofadcdnkkjdfgjcmjaadnlehnnihnl\\6.6.3_0',
+  // );
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -37,6 +43,13 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
+
+// load extension
+app.whenReady().then(() => {
+  installExtension(VUEJS3_DEVTOOLS)
+    .then((name) => console.log(`${name} extension install successful`))
+    .catch(console.error);
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

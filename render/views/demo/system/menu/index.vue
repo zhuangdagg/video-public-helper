@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
+    <BasicTable rowKey="id" @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增菜单 </a-button>
       </template>
@@ -50,6 +50,9 @@
   const [registerTable, { reload, expandAll }] = useTable({
     title: '菜单列表',
     api: menuStore.getMenuList,
+    searchInfo: {
+      pageSize: 999,
+    },
     columns,
     formConfig: {
       labelWidth: 120,
@@ -60,6 +63,7 @@
     striped: false,
     useSearchForm: true,
     showTableSetting: true,
+    rowKey: 'id',
     bordered: true,
     showIndexColumn: false,
     canResize: false,
@@ -97,6 +101,7 @@
   }
 
   function onFetchSuccess() {
+    console.log('expandAll-------------------');
     // 演示默认展开所有表项
     nextTick(expandAll);
   }

@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "commonjs",
+    // "module": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -12,11 +12,12 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "jsx": "react",
     "types": ["vite/client"],
     "paths": {
       "@/*": ["render/*"],
       "#/*": ["types/*"]
     }
   },
-  "exclude": ["dist"]
+  "exclude": ["dist", "node_modules"]
 }
