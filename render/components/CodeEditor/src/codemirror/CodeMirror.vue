@@ -23,10 +23,10 @@
   import { useAppStore } from '@/store/modules/app';
   import CodeMirror from 'codemirror';
   import { MODE } from './../typing';
-  // css
-  import './codemirror.css';
-  import 'codemirror/theme/idea.css';
-  import 'codemirror/theme/material-palenight.css';
+  // TODO: css
+  // import './codemirror.css';
+  // import 'codemirror/theme/idea.css';
+  // import 'codemirror/theme/material-palenight.css';
   // modes
   import 'codemirror/mode/javascript/javascript';
   import 'codemirror/mode/css/css';

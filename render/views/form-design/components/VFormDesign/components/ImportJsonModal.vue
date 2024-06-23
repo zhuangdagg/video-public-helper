@@ -36,7 +36,6 @@
   import { defineComponent, reactive, toRefs } from 'vue';
   // import message from '../../../utils/message';
   import { useFormDesignState } from '../../../hooks/useFormDesignState';
-  // import { codemirror } from 'vue-codemirror-lite';
   import { IFormConfig } from '../../../typings/v-form-component';
   import { formItemsForEach, generateKey } from '../../../utils';
   import { CodeEditor, MODE } from '@/components/CodeEditor';
