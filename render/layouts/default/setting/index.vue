@@ -7,6 +7,7 @@
 <script lang="ts" setup>
   import SettingDrawer from './SettingDrawer';
   import Icon from '@/components/Icon/Icon.vue';
+  import Iconify from '@/components/Icon/Iconify.vue';
 
   import { useDrawer } from '@/components/Drawer';
 

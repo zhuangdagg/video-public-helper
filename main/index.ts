@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu, ipcMain, nativeTheme } from 'electron';
 import path from 'path';
 
-import './handle'
+import './handle';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -14,10 +14,11 @@ Menu.setApplicationMenu(null);
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 1024,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false,
     },
   });
 

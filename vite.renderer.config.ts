@@ -37,13 +37,13 @@ export default defineConfig(async (env) => {
     },
     // server: {
     //   proxy: {
-    //     // '/proxy': {
-    //     //   target: 'http://127.0.0.1:8000',
-    //     //   // target: 'http://139.9.39.205:8000',
-    //     //   changeOrigin: true,
-    //     //   rewrite: (path) => path.replace(new RegExp('^/proxy'), ''),
-    //     //   secure: false,
-    //     // },
+    //     '/proxy': {
+    //       // target: 'http://127.0.0.1:8000',
+    //       target: 'http://139.9.39.205:8000',
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(new RegExp('^/proxy'), ''),
+    //       secure: false,
+    //     },
     //   },
     // },
     plugins: [

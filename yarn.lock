@@ -984,7 +984,7 @@
   resolved "https://registry.npmmirror.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@iconify/iconify@>=3.1.1":
+"@iconify/iconify@^3.1.1", "@iconify/iconify@>=3.1.1":
   version "3.1.1"
   resolved "https://registry.npmmirror.com/@iconify/iconify/-/iconify-3.1.1.tgz"
   integrity sha512-1nemfyD/OJzh9ALepH7YfuuP8BdEB24Skhd8DXWh0hzcOxImbb1ZizSZkpCzAwSZSGcJFmscIBaBQu+yLyWaxQ==
@@ -998,7 +998,15 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@iconify/types@^2.0.0":
+"@iconify/json@^2.2.221":
+  version "2.2.221"
+  resolved "https://registry.npmmirror.com/@iconify/json/-/json-2.2.221.tgz"
+  integrity sha512-pCyE3Z3kOq2OmYm80nnyTrYdDzGKIyzNwM5+ABL1gguOTslhu4QBZUO+o5gMiolh3eywcOd8CgN00uBWVHbzyg==
+  dependencies:
+    "@iconify/types" "*"
+    pathe "^1.1.2"
+
+"@iconify/types@*", "@iconify/types@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmmirror.com/@iconify/types/-/types-2.0.0.tgz"
   integrity sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
@@ -1015,6 +1023,13 @@
     kolorist "^1.8.0"
     local-pkg "^0.5.0"
     mlly "^1.6.1"
+
+"@iconify/vue@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.npmmirror.com/@iconify/vue/-/vue-4.1.2.tgz"
+  integrity sha512-CQnYqLiQD5LOAaXhBrmj1mdL2/NCJvwcC4jtW2Z8ukhThiFkLDkutarTOV2trfc9EXqUqRs0KqXOL9pZ/IyysA==
+  dependencies:
+    "@iconify/types" "^2.0.0"
 
 "@intlify/core-base@9.13.1":
   version "9.13.1"
@@ -9586,7 +9601,7 @@ vue-types@^5.1.1:
   dependencies:
     is-plain-object "5.0.0"
 
-"vue@^2.0.0 || ^3.0.0", "vue@^2.6.14 || ^3.3.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.0.1, vue@^3.2.0, vue@^3.2.25, vue@^3.4.29, vue@>=3.0.0, vue@>=3.0.3, vue@>=3.2.0, vue@3.4.29:
+"vue@^2.0.0 || ^3.0.0", "vue@^2.6.14 || ^3.3.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.0.1, vue@^3.2.0, vue@^3.2.25, vue@^3.4.29, vue@>=3, vue@>=3.0.0, vue@>=3.0.3, vue@>=3.2.0, vue@3.4.29:
   version "3.4.29"
   resolved "https://registry.npmmirror.com/vue/-/vue-3.4.29.tgz"
   integrity sha512-8QUYfRcYzNlYuzKPfge1UWC6nF9ym0lx7mpGVPJYNhddxEf3DD0+kU07NTL0sXuiT2HuJuKr/iEO8WvXvT0RSQ==
