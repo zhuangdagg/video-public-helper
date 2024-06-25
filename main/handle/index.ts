@@ -1,3 +1,3 @@
+import './dark-mode';
 
-
-import './dark-mode'
+import './playwright';
