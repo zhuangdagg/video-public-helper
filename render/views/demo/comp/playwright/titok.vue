@@ -1,5 +1,4 @@
 <template>
-  <div>titok playwright control</div>
   <div>
     <h3>账号登录：</h3>
     <Button @click="login">登录titok</Button>

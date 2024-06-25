@@ -18,7 +18,7 @@ import { isArray } from '@/utils/is';
 import { h } from 'vue';
 
 interface UserState {
-  userInfo: Nullable<UserInfo>;
+  userInfo: Partial<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
@@ -29,7 +29,7 @@ export const useUserStore = defineStore({
   id: 'app-user',
   state: (): UserState => ({
     // user info
-    userInfo: null,
+    userInfo: {},
     // token
     token: undefined,
     // roleList
@@ -40,7 +40,7 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
-    getUserInfo(state): UserInfo {
+    getUserInfo(state): Partial<UserInfo> {
       return state.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
     getToken(state): string {
@@ -66,7 +66,7 @@ export const useUserStore = defineStore({
       setAuthCache(ROLES_KEY, roleList);
     },
     setUserInfo(info: UserInfo | null) {
-      this.userInfo = info;
+      this.userInfo = Object.assign(this.userInfo, info);
       this.lastUpdateTime = new Date().getTime();
       setAuthCache(USER_INFO_KEY, info);
     },
@@ -74,7 +74,7 @@ export const useUserStore = defineStore({
       this.sessionTimeout = flag;
     },
     resetState() {
-      this.userInfo = null;
+      this.userInfo = {};
       this.token = '';
       this.roleList = [];
       this.sessionTimeout = false;

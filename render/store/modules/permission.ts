@@ -169,6 +169,18 @@ export const usePermissionStore = defineStore({
         return;
       };
 
+      /**
+       * @description 递归获取菜单首页路径
+       */
+      const getHomePath = (list: any[]): string => {
+        const item = list?.[0];
+        if (item?.children?.length) {
+          return getHomePath(item.children);
+        } else {
+          return item?.path || '';
+        }
+      };
+
       switch (permissionMode) {
         // 角色权限
         case PermissionModeEnum.ROLE:
@@ -188,7 +200,7 @@ export const usePermissionStore = defineStore({
           // 对一级路由再次根据角色权限过滤
           routes = routes.filter(routeFilter);
           // 将路由转换成菜单
-          const menuList = transformRouteToMenu(routes, true);
+          const menuList: AppRouteRecordRaw[] = transformRouteToMenu(routes, true);
           // 移除掉 ignoreRoute: true 的路由 非一级路由
           routes = filter(routes, routeRemoveIgnoreFilter);
           // 移除掉 ignoreRoute: true 的路由 一级路由；
@@ -236,6 +248,12 @@ export const usePermissionStore = defineStore({
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
+
+          // 设置后台路由首页路径
+          userStore.setUserInfo({
+            ...userStore.userInfo,
+            homePath: getHomePath(backMenuList),
+          });
 
           // remove meta.ignoreRoute item
           // 删除 meta.ignoreRoute 项

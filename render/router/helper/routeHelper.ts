@@ -71,7 +71,6 @@ function dynamicImport(
 // Turn background objects into routing objects
 // 将背景对象变成路由对象
 export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModule[]): T[] {
-  console.log(routeList, '--before');
   routeList = _menuDataToRoutes(routeList);
   console.log({ routeList });
   routeList.forEach((route) => {

@@ -31,6 +31,16 @@ function joinParentPath(menus: Menu[], parentPath = '') {
   }
 }
 
+// 菜单排序
+function sortMenuList(list: any[]) {
+  list.sort((a, b) => (a?.order || 0) - (b?.order || 0));
+  list.forEach((item) => {
+    if (item?.children?.length) {
+      sortMenuList(item.children);
+    }
+  });
+}
+
 // Parsing the menu module
 export function transformMenuModule(menuModule: MenuModule): Menu {
   const { menu } = menuModule;
@@ -44,7 +54,7 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
 // 将路由转换成菜单
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
   // 借助 lodash 深拷贝
-  const cloneRouteModList = cloneDeep(routeModList);
+  const cloneRouteModList: AppRouteRecordRaw[] = cloneDeep(routeModList);
   const routeList: AppRouteRecordRaw[] = [];
 
   // 对路由项进行修改
@@ -70,6 +80,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
         meta: node.meta,
         name: title,
         hideMenu,
+        order: node.order,
         path: node.path,
         ...(node.redirect ? { redirect: node.redirect } : {}),
       };
@@ -77,8 +88,11 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
   });
   // 路径处理
   joinParentPath(list);
+
+  // 菜单排序
+  sortMenuList(list);
   console.log(list);
-  return cloneDeep(list);
+  return cloneDeep<AppRouteRecordRaw[]>(list);
 }
 
 /**
