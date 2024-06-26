@@ -1,11 +1,21 @@
-import { contextBridge, ipcRenderer, IpcMainInvokeEvent } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('darkMode', {
-  toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-  system: () => ipcRenderer.invoke('dark-mode:system'),
-});
+import { handleKeys } from './handle/handleMap';
 
-contextBridge.exposeInMainWorld('playwright', {
-  login: () => ipcRenderer.invoke('playwright:login'),
-  // system: () => ipcRenderer.invoke('dark-mode:system')
-});
+function createPreload() {
+  Object.keys(handleKeys).forEach((field) => {
+    const methods: Record<string, Function> = {};
+    Object.entries(handleKeys[field]).forEach(([method, invoke]) => {
+      console.log({ field, method, invoke });
+      methods[method] = (...args: any[]) => ipcRenderer.invoke(invoke, ...args);
+    });
+
+    contextBridge.exposeInMainWorld(field, methods);
+  });
+}
+
+createPreload();
+
+// contextBridge.exposeInMainWorld('playwright', {
+//   login: (args: any) => ipcRenderer.invoke('playwright:login', args),
+// });
