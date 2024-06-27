@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-  // import { defineOption } from 'vue';
   import { BasicTable, useTable, TableAction } from '@/components/Table';
   import { useData } from './account.data';
   import Icon from '@/components/Icon/Icon.vue';
@@ -32,21 +31,46 @@
 
   import { useMessage } from '@/hooks/web/useMessage';
   import { createLoading } from '@/components/Loading';
+  import { useLocalforage } from '@/hooks/web/useLocalforage';
+  import { useIPC } from '@/hooks/web/useIPC';
+  import { ref, onMounted } from 'vue';
 
   const { columns, formSchemas } = useData();
   const { createMessage } = useMessage();
+  const { localforage } = useLocalforage();
+  const { accountLogin } = useIPC();
   const globalLoading = createLoading({ tip: '请在浏览器完成登录操作' });
   defineOptions({ name: 'plationAccountManage' });
+
+  const tableData = ref<object[]>([]);
 
   const [registerTable, tablrMethod] = useTable({
     title: '账号列表',
     columns,
+    dataSource: tableData,
     useSearchForm: true,
     formConfig: {
       labelWidth: 120,
       schemas: formSchemas,
     },
   });
+
+  onMounted(() => {
+    fetchTableData();
+  });
+
+  const fetchTableData = () => {
+    const _list: any = [];
+    localforage
+      .iterate((val, key, index) => {
+        _list.push(val);
+        console.log({ val, key, index });
+      })
+      .then((res) => {
+        tableData.value = _list;
+        console.log(res, '--then');
+      }, console.error);
+  };
 
   const handleCreate: MenuClickEventHandler = (evt) => {
     console.log(evt);
@@ -67,8 +91,9 @@
   const addTitokAccount = async () => {
     try {
       globalLoading.open();
-      const userInfo = await window.playwright.login('titok');
+      const userInfo = await accountLogin('titok');
       // window.darkMode.toggle('tttt');
+      await localforage.setItem(String(userInfo.accountId), userInfo);
       console.log(userInfo);
       createMessage.warning('新增账号成功');
     } catch (err) {

@@ -15,7 +15,3 @@ function createPreload() {
 }
 
 createPreload();
-
-// contextBridge.exposeInMainWorld('playwright', {
-//   login: (args: any) => ipcRenderer.invoke('playwright:login', args),
-// });

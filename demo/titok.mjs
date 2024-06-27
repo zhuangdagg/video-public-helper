@@ -1,10 +1,11 @@
 import { chromium, devices, errors } from 'playwright';
+// import { storageStateStr } from './storageState.mjs';
 
 const publishContent = {
   type: 'video',
   title: '我的第一个视频',
   desc: '随便发发 #首发 #雨的',
-  url: '',
+  filePath: 'C:\\Users\\zhuang\\Videos\\a.mp4',
 };
 
 let browser;
@@ -46,13 +47,13 @@ async function login() {
   // console.log(btn, '--btn');
   // await btn.click();
   await page.waitForURL('**/home', { timeout: 0, waitUntil: 'domcontentloaded' });
-  // setTimeout(async () => {
-  //   await page.context().storageState({ path: './demo/storageState.json' });
-  //   console.log('登录成功');
-  //   page.close();
-  //   await browserContext.close();
-  //   await browser.close();
-  // }, 5000);
+  setTimeout(async () => {
+    await page.context().storageState({ path: './demo/storageState.json' });
+    console.log('登录成功');
+    page.close();
+    await browserContext.close();
+    await browser.close();
+  }, 5000);
 }
 
 // 发布
@@ -92,11 +93,11 @@ async function setPublishContent() {
   try {
     await page
       .locator('div#micro input[accept="video/mp4,video/x-m4v,video/*"]')
-      ?.setInputFiles('./video/a.mp4');
+      ?.setInputFiles(publishContent.filePath);
   } catch (err) {
     console.error(err);
   }
-  await waitVideoLoaded();
+  // await waitVideoLoaded();
   console.log('发布成功！');
 }
 

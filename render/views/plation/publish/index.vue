@@ -1,0 +1,108 @@
+<template>
+  <PageWrapper class="content-publish" title="内容发布" content="目前支持抖音平台多账户视频发布">
+    <Card title="上传视频" :bordered="false">
+      <UploadDragger
+        v-model:fileList="fileList"
+        accept="video/*"
+        :beforeUpload="beforeUpload"
+        @remove="removeFile"
+      >
+        <p class="ant-upload-drag-icon">
+          <inbox-outlined></inbox-outlined>
+        </p>
+        <p class="ant-upload-text">点击或拖拽文件上传</p>
+        <p class="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading company data or
+          other band files
+        </p>
+      </UploadDragger>
+    </Card>
+    <Card title="内容编辑" :bordered="false" class="!mt-5">
+      <BasicForm @register="formRegister" />
+    </Card>
+    <Card title="发布账号" :bordered="false" class="!mt-5">
+      <accountTable ref="accountTableRef" />
+    </Card>
+    <template #rightFooter>
+      <a-button type="primary" @click="handlePublish">发布</a-button>
+    </template>
+  </PageWrapper>
+</template>
+
+<script setup lang="ts">
+  import { Card, UploadDragger } from 'ant-design-vue';
+  import { InboxOutlined } from '@ant-design/icons-vue';
+  import { PageWrapper } from '@/components/Page';
+  import { BasicForm, useForm } from '@/components/Form';
+  import accountTable from './component/accountTable.vue';
+  import { ref, unref } from 'vue';
+
+  // data
+  import { useData } from './publish.data';
+  import { useMessage } from '@/hooks/web/useMessage';
+  import { useIPC } from '@/hooks/web/useIPC';
+
+  import type { UploadProps } from 'ant-design-vue';
+  import type { VideoPublishInfo } from '#/video-plation-publish';
+
+  defineOptions({ name: 'ContentPublish' });
+
+  const { schemas } = useData();
+  const { plationPublish } = useIPC();
+  const { createMessage } = useMessage();
+  const accountTableRef = ref<any>(null);
+  const fileList = ref<UploadProps['fileList']>([]);
+
+  const [formRegister, formMethod] = useForm({
+    // layout: 'vertical',
+    baseColProps: {
+      span: 20,
+    },
+    schemas,
+    showActionButtonGroup: false,
+  });
+
+  const beforeUpload: UploadProps['beforeUpload'] = (file) => {
+    fileList.value = [file];
+
+    return false;
+  };
+  const removeFile: UploadProps['onRemove'] = () => {
+    fileList.value = [];
+  };
+
+  const handlePublish = () => {
+    if (!unref(fileList).length) {
+      createMessage.error('请上传视频');
+      return;
+    }
+    let publishInfo: VideoPublishInfo;
+    const filePath = unref(fileList)[0].originFileObj?.path;
+    formMethod
+      .validate()
+      .then((form) => {
+        const { title, desc } = form;
+        publishInfo = {
+          title,
+          desc,
+          filePath,
+          account: unref(accountTableRef).getAccouont(),
+        };
+
+        console.log({ publishInfo });
+        return plationPublish(publishInfo);
+      })
+      .then((result) => {
+        createMessage.success('发布操作完成');
+        console.log({ result });
+        //   // TODO:
+        //   // 生成发布记录， 跳转发布结果
+      }, console.error);
+  };
+</script>
+
+<style lang="less" scoped>
+  .content-publish {
+    padding-bottom: 48px;
+  }
+</style>

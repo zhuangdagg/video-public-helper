@@ -1,1 +1,3 @@
 import './login';
+
+import './publish';

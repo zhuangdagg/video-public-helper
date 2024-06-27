@@ -5,6 +5,7 @@ export const darkModeEnum = {
 
 export const playwrightEnum = {
   login: 'playwright:login',
+  publish: 'playwright:publish',
 };
 
 /**
