@@ -1,5 +1,5 @@
 <template>
-  <div class="plation-account-manage">
+  <PageWrapper contentFullHeight>
     <BasicTable @register="registerTable">
       <template #toolbar>
         <Dropdown>
@@ -17,14 +17,15 @@
         </Dropdown>
       </template>
     </BasicTable>
-  </div>
+  </PageWrapper>
 </template>
 
 <script setup lang="ts">
+  import { PageWrapper } from '@/components/Page';
   import { BasicTable, useTable, TableAction } from '@/components/Table';
   import { useData } from './account.data';
   import Icon from '@/components/Icon/Icon.vue';
-  import { Dropdown, Menu, MenuItem } from 'ant-design-vue';
+  import { Dropdown, Menu, MenuItem, message } from 'ant-design-vue';
 
   import { PlationTypeEnum, PlationNames } from '@/enums/plationAccountEnum';
   import { MenuClickEventHandler } from 'ant-design-vue/es/menu/src/interface';
@@ -33,7 +34,7 @@
   import { createLoading } from '@/components/Loading';
   import { useLocalforage } from '@/hooks/web/useLocalforage';
   import { useIPC } from '@/hooks/web/useIPC';
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, nextTick, computed } from 'vue';
 
   const { columns, formSchemas } = useData();
   const { createMessage } = useMessage();
@@ -44,10 +45,29 @@
 
   const tableData = ref<object[]>([]);
 
-  const [registerTable, tablrMethod] = useTable({
+  const fetchTableData = () => {
+    return new Promise((resolve, reject) => {
+      const _list: any = [];
+      localforage
+        .iterate((val, key, index) => {
+          _list.push(val);
+        })
+        .then(() => {
+          console.log({ _list });
+          resolve({
+            data: _list,
+            total: _list.length,
+          });
+        });
+    });
+  };
+
+  const [registerTable, tableMethod] = useTable({
     title: '账号列表',
     columns,
-    dataSource: tableData,
+    rowKey: 'accountId',
+    bordered: true,
+    api: fetchTableData,
     useSearchForm: true,
     formConfig: {
       labelWidth: 120,
@@ -56,21 +76,8 @@
   });
 
   onMounted(() => {
-    fetchTableData();
+    // fetchTableData();
   });
-
-  const fetchTableData = () => {
-    const _list: any = [];
-    localforage
-      .iterate((val, key, index) => {
-        _list.push(val);
-        console.log({ val, key, index });
-      })
-      .then((res) => {
-        tableData.value = _list;
-        console.log(res, '--then');
-      }, console.error);
-  };
 
   const handleCreate: MenuClickEventHandler = (evt) => {
     console.log(evt);
@@ -96,6 +103,10 @@
       await localforage.setItem(String(userInfo.accountId), userInfo);
       console.log(userInfo);
       createMessage.warning('新增账号成功');
+      nextTick(() => {
+        // fetchTableData();
+        tableMethod.reload();
+      });
     } catch (err) {
       console.log(err);
       createMessage.warning('新增账号失败');

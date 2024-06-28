@@ -13,6 +13,7 @@ export interface VideoPublishInfo {
   title?: string;
   desc?: string;
   filePath: string;
+  fileType: 'video' | 'image' | 'message';
   account: PlationAccountInfo[];
 }
 
@@ -22,4 +23,5 @@ export interface VideoPublishResult {
   result: 'success' | 'failure';
   time: string;
   title: string;
+  detail?: any[];
 }

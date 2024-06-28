@@ -41,6 +41,7 @@
   import { useData } from './publish.data';
   import { useMessage } from '@/hooks/web/useMessage';
   import { useIPC } from '@/hooks/web/useIPC';
+  import { createLoading } from '@/components/Loading';
 
   import type { UploadProps } from 'ant-design-vue';
   import type { VideoPublishInfo } from '#/video-plation-publish';
@@ -53,6 +54,7 @@
   const accountTableRef = ref<any>(null);
   const fileList = ref<UploadProps['fileList']>([]);
 
+  const globalLoading = createLoading({ tip: '发布中，请勿进行任何操作！' });
   const [formRegister, formMethod] = useForm({
     // layout: 'vertical',
     baseColProps: {
@@ -76,6 +78,11 @@
       createMessage.error('请上传视频');
       return;
     }
+    const account = unref(accountTableRef).getAccouont();
+    if (!account.length) {
+      createMessage.error('请选择上传账号');
+      return;
+    }
     let publishInfo: VideoPublishInfo;
     const filePath = unref(fileList)[0].originFileObj?.path;
     formMethod
@@ -86,10 +93,12 @@
           title,
           desc,
           filePath,
-          account: unref(accountTableRef).getAccouont(),
+          fileType: 'video',
+          account,
         };
 
         console.log({ publishInfo });
+        globalLoading.open();
         return plationPublish(publishInfo);
       })
       .then((result) => {
@@ -97,7 +106,10 @@
         console.log({ result });
         //   // TODO:
         //   // 生成发布记录， 跳转发布结果
-      }, console.error);
+      }, console.error)
+      .finally(() => {
+        globalLoading.close();
+      });
   };
 </script>
 
