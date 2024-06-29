@@ -1,7 +1,8 @@
-import { Browser, BrowserContext, BrowserType, Page, chromium, devices } from 'playwright';
+import { Browser, BrowserContext, Page, chromium, devices } from 'playwright';
 import { ipcMain } from 'electron';
-import { playwrightEnum, handleKeys } from '../handleMap';
+import { playwrightEnum } from '../handleMap';
 import stroageJson from './storageState.json';
+import { getTitokUserinfo } from './utils';
 
 const titokConfig: LoginConfig = {
   loginUrl: 'https://creator.douyin.com/',
@@ -16,7 +17,7 @@ ipcMain.handle(playwrightEnum.login, async (evt, plationType: string) => {
   switch (plationType) {
     case 'titok':
       handler = useLogin(titokConfig);
-      info = await handler.exec();
+      info = await handler.exec(getTitokUserinfo);
       break;
     default:
       console.log('暂不支持该平台');
@@ -40,6 +41,7 @@ export interface UserInfo {
   fans?: number;
   status: 0 | 1;
   accountType: any;
+  origin?: Record<string, any>;
 }
 
 function useLogin(config: LoginConfig) {
@@ -49,8 +51,8 @@ function useLogin(config: LoginConfig) {
   let userInfo: UserInfo = {
     status: 0,
     storageState: JSON.stringify(stroageJson),
-    name: '雨的new1',
-    accountId: '10003622674',
+    name: '',
+    accountId: '',
     fans: 0,
     accountType: config.accountType,
   };
@@ -77,15 +79,21 @@ function useLogin(config: LoginConfig) {
     return true;
   };
 
-  const exec = async () => {
-    // try {
-    //   await open();
-    //   userInfo.storageState = JSON.stringify(await context.storageState());
-    // } catch (err) {
-    //   console.error('获取storageState登录状态失败', err);
-    // } finally {
-    //   browser?.close();
-    // }
+  const close = async () => {
+    await context?.close();
+    await browser?.close();
+  };
+
+  const exec = async (getUserInfo: any = () => {}) => {
+    try {
+      await open();
+      userInfo.storageState = JSON.stringify(await context.storageState());
+      await getUserInfo(page, userInfo);
+    } catch (err) {
+      console.error('获取storageState登录状态失败', err);
+    } finally {
+      close();
+    }
 
     // 获取用户信息122344
     return userInfo;
@@ -93,5 +101,6 @@ function useLogin(config: LoginConfig) {
   return {
     open,
     exec,
+    close,
   };
 }

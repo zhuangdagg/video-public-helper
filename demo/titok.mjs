@@ -73,13 +73,42 @@ async function publish() {
 
   page = await browserContext.newPage();
 
-  await page.goto('https://creator.douyin.com/creator-micro/content/publish');
+  await getUserInfo();
 
-  await setPublishContent();
-  // await setDescription();
+  // 发布
+  // await setPublishContent();
+}
+
+async function getUserInfo() {
+  await page.goto('https://creator.douyin.com/creator-micro/home');
+
+  const res = await page.waitForResponse(
+    (response) => {
+      if (
+        response.url().indexOf('module') > -1 &&
+        response.request().method() === 'POST' &&
+        response.status() == 200
+      ) {
+        const data = response.request().postDataJSON();
+        if (data && data.module_key_list && data.module_key_list.includes('PERSONAL_PROFILE')) {
+          console.log(data);
+          return true;
+        }
+      }
+
+      return false;
+    },
+    // 'https://creator.douyin.com/aweme/v1/creator/homepage/module/',
+  );
+
+  // await res.finished();
+
+  console.log(await res.json());
+  // POST https://creator.douyin.com/aweme/v1/creator/homepage/module/ { module_key_list: ['PERSONAL_PROFILE'], tpl_id: '2' }
 }
 
 async function setPublishContent() {
+  await page.goto('https://creator.douyin.com/creator-micro/content/publish');
   await page.getByPlaceholder('好的作品标题可获得更多浏览').fill(publishContent.title);
 
   // TODO:

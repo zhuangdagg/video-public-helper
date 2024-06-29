@@ -104,7 +104,6 @@ function usePublish(config: PublishConfig, log: any[]) {
    * 关闭相关句柄
    */
   const close = async () => {
-    await page?.close();
     await context?.close();
     await browser?.close();
   };
@@ -134,7 +133,7 @@ function usePublish(config: PublishConfig, log: any[]) {
       throw new Error('file input error');
     }
     log.push('publish content input done all');
-    await waitVideoLoaded(5);
+    await waitVideoLoaded(10); // 等待10分钟
     console.log('publish success');
   };
 
