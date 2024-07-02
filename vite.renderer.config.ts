@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { readPackageJSON } from 'pkg-types';
 
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { pluginExposeRenderer } from './vite.base.config';
 
 import { generate } from '@ant-design/colors';
@@ -19,7 +19,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import purgeIcons from 'vite-plugin-purge-icons';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import compressPlugin from 'vite-plugin-compression';
 import UnoCSS from 'unocss/vite';
+import { createAppConfigPlugin } from './vite-plugins/appConfig';
 
 // https://vitejs.dev/config
 export default defineConfig(async (env) => {
@@ -27,7 +29,23 @@ export default defineConfig(async (env) => {
 
   const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? '';
+  console.log(forgeEnv, '-- forge env');
   const isBuild = forgeEnv.command === 'build';
+  const { VITE_BUILD_COMPRESS } = loadEnv(mode, root);
+
+  const plugins: PluginOption[] = [
+    pluginExposeRenderer(name),
+    vue(),
+    vueJsx(),
+    purgeIcons(),
+    createHtmlPlugin(),
+    UnoCSS(),
+    configSvgIconsPlugin({ isBuild }),
+    await createAppConfigPlugin({ root, isBuild }),
+  ];
+  if (isBuild) {
+    plugins.push(configCompressPlugin({ compress: VITE_BUILD_COMPRESS, deleteOriginFile: true }));
+  }
   return {
     root,
     mode,
@@ -46,15 +64,7 @@ export default defineConfig(async (env) => {
     //     },
     //   },
     // },
-    plugins: [
-      pluginExposeRenderer(name),
-      vue(),
-      vueJsx(),
-      purgeIcons(),
-      createHtmlPlugin(),
-      UnoCSS(),
-      configSvgIconsPlugin({ isBuild }),
-    ],
+    plugins,
     resolve: {
       preserveSymlinks: true,
       alias: [
@@ -139,4 +149,36 @@ function configSvgIconsPlugin({ isBuild }: { isBuild: boolean }) {
     svgoOptions: isBuild,
   });
   return svgIconsPlugin as PluginOption;
+}
+
+function configCompressPlugin({
+  compress,
+  deleteOriginFile = false,
+}: {
+  compress: string;
+  deleteOriginFile?: boolean;
+}): PluginOption[] {
+  const compressList = compress.split(',');
+
+  const plugins: PluginOption[] = [];
+
+  if (compressList.includes('gzip')) {
+    plugins.push(
+      compressPlugin({
+        ext: '.gz',
+        deleteOriginFile,
+      }),
+    );
+  }
+
+  if (compressList.includes('brotli')) {
+    plugins.push(
+      compressPlugin({
+        ext: '.br',
+        algorithm: 'brotliCompress',
+        deleteOriginFile,
+      }),
+    );
+  }
+  return plugins;
 }

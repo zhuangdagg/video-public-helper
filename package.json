@@ -6,12 +6,14 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "dev": "electron-forge start",
+    "build": "electron-vite build",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "postinstall": "node node_modules/electron/install.js",
-    "demo": "node ./demo/titok.mjs"
+    "demo": "node ./demo/titok.mjs",
+    "pack": "electron-packager . --out=out"
   },
   "keywords": [],
   "author": {
@@ -38,6 +40,7 @@
     "exceljs": "^4.4.0",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
+    "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^6.2.1",
     "pinia": "^2.1.7",
@@ -86,14 +89,16 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "@vue/compiler-sfc": "^3.4.5",
-    "electron": "31.0.2",
+    "electron": "31.1.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
     "less": "^4.2.0",
+    "sass": "^1.77.6",
     "ts-node": "^10.9.2",
     "typescript": "~4.5.4",
     "vite": "^5.0.12",
+    "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-purge-icons": "^0.10.0",
     "vite-plugin-svg-icons": "^2.0.1"

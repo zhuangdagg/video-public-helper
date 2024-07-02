@@ -46,9 +46,11 @@ app.on('ready', createWindow);
 
 // load extension
 app.whenReady().then(() => {
-  installExtension(VUEJS3_DEVTOOLS)
-    .then((name) => console.log(`${name} extension install successful`))
-    .catch(console.error);
+  if (process.env.NODE_ENV === 'development') {
+    installExtension(VUEJS3_DEVTOOLS)
+      .then((name) => console.log(`${name} extension install successful`))
+      .catch(console.error);
+  }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
