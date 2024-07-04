@@ -1,23 +1,22 @@
-import { app, BrowserWindow, Menu, ipcMain, nativeTheme, session } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import path from 'node:path';
 
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 import './handle';
+import { useUpdateManage } from './utils/update';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+console.log('isPackaged:', app.isPackaged);
+
 // 隐藏原生菜单
 Menu.setApplicationMenu(null);
 
 const createWindow = () => {
-  // load extension
-  // session.defaultSession.loadExtension(
-  //   'C:UserszhuangAppDataLocalMicrosoftEdgeUser DataDefaultExtensionsolofadcdnkkjdfgjcmjaadnlehnnihnl\\6.6.3_0',
-  // );
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -34,19 +33,22 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+  if (!app.isPackaged) {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  return mainWindow;
 };
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
 
 // load extension
 app.whenReady().then(() => {
-  if (process.env.NODE_ENV === 'development') {
+  const mainWindow = createWindow();
+  if (app.isPackaged) {
+    const updateMgr = useUpdateManage(mainWindow);
+    updateMgr.watch();
+  } else {
+    // install VUE devtool in chrome
     installExtension(VUEJS3_DEVTOOLS)
       .then((name) => console.log(`${name} extension install successful`))
       .catch(console.error);

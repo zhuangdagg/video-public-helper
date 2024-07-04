@@ -27,7 +27,7 @@ import { createAppConfigPlugin } from './vite-plugins/appConfig';
 export default defineConfig(async (env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
 
-  const { root, mode, forgeConfigSelf } = forgeEnv;
+  const { root, mode, forgeConfigSelf, command } = forgeEnv;
   const name = forgeConfigSelf.name ?? '';
   console.log(forgeEnv, '-- forge env');
   const isBuild = forgeEnv.command === 'build';
@@ -44,7 +44,7 @@ export default defineConfig(async (env) => {
     await createAppConfigPlugin({ root, isBuild }),
   ];
   if (isBuild) {
-    plugins.push(configCompressPlugin({ compress: VITE_BUILD_COMPRESS, deleteOriginFile: true }));
+    // plugins.push(configCompressPlugin({ compress: VITE_BUILD_COMPRESS, deleteOriginFile: true }));
   }
   return {
     root,
@@ -52,6 +52,8 @@ export default defineConfig(async (env) => {
     base: './',
     build: {
       outDir: `.vite/renderer/${name}`,
+      minify: command === 'build',
+      chunkSizeWarningLimit: 1500,
     },
     // server: {
     //   proxy: {
