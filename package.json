@@ -5,7 +5,7 @@
   "description": "a video public assistant",
   "main": ".vite/build/main.js",
   "scripts": {
-    "dev": "electron-forge start --inspect-electron",
+    "dev": "electron-forge start --inspect-electron=9999",
     "build": "electron-vite build",
     "package": "electron-forge package",
     "make": "electron-forge make",

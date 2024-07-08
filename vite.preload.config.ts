@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 // https://vitejs.dev/config
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'build'>;
-  const { root, forgeConfigSelf } = forgeEnv;
+  const { root, forgeConfigSelf, mode } = forgeEnv;
   const config: UserConfig = {
     build: {
       rollupOptions: {
@@ -24,6 +24,9 @@ export default defineConfig((env) => {
       },
     },
     plugins: [pluginHotRestart('reload')],
+    define: {
+      __DEV__: mode === 'development',
+    },
     resolve: {
       alias: [
         {

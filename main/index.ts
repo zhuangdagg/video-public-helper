@@ -11,8 +11,6 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-console.log('isPackaged:', app.isPackaged);
-
 // 隐藏原生菜单
 Menu.setApplicationMenu(null);
 
@@ -33,7 +31,7 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
-  if (!app.isPackaged) {
+  if (__DEV__) {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   }
@@ -44,14 +42,16 @@ const createWindow = () => {
 // load extension
 app.whenReady().then(() => {
   const mainWindow = createWindow();
-  if (app.isPackaged) {
-    const updateMgr = useUpdateManage(mainWindow);
-    updateMgr.watch();
-  } else {
+  if (__DEV__) {
     // install VUE devtool in chrome
     installExtension(VUEJS3_DEVTOOLS)
       .then((name) => console.log(`${name} extension install successful`))
       .catch(console.error);
+    const updateMgr = useUpdateManage(mainWindow);
+    updateMgr.watch();
+  } else {
+    const updateMgr = useUpdateManage(mainWindow);
+    updateMgr.watch();
   }
 });
 

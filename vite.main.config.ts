@@ -5,14 +5,20 @@ import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from './vi
 // https://vitejs.dev/config
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'build'>;
-  const { forgeConfigSelf } = forgeEnv;
-  const define = getBuildDefine(forgeEnv);
+  const { forgeConfigSelf, mode } = forgeEnv;
+  const define = Object.assign(
+    {
+      __DEV__: mode === 'development',
+    },
+    getBuildDefine(forgeEnv),
+  );
+  console.log({ define });
   const config: UserConfig = {
     build: {
       lib: {
         entry: forgeConfigSelf.entry!,
         fileName: (format, entryName) => {
-          return 'main.js'
+          return 'main.js';
         },
         formats: ['cjs'],
       },

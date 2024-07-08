@@ -17,14 +17,13 @@ let timer = null as any;
  */
 export const useUpdateManage = (
   mainWindow: BrowserWindow,
-  config = { delayTime: 60 * 60 * 1000, server: 'http://139.9.39.205:8000' },
+  config = { delayTime: __DEV__ ? 60 * 1000 : 10 * 60 * 1000, server: 'http://139.9.39.205:8000' },
 ) => {
   const url = `${config.server}/api/electron-update/win32/${app.getVersion()}/stable`;
   console.log({ url });
   autoUpdater.setFeedURL({ url });
 
   function watch() {
-    autoUpdater.checkForUpdates();
     _clearInterval();
     timer = setInterval(() => {
       autoUpdater.checkForUpdates();
@@ -73,8 +72,8 @@ export const useUpdateManage = (
   });
 
   autoUpdater.on('error', (err) => {
-    mainWindow.webContents.send('version-check', err.message);
-    _clearInterval();
+    mainWindow.webContents.send('version-check', 'error', err.message);
+    // _clearInterval();
   });
 
   return {
