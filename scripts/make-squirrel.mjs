@@ -16,6 +16,8 @@ async function getSquirrelWindowsOption() {
     setupExe: `${name}-${convertVersion(version)} Setup.exe`,
     iconUrl: path.join(root, './public/logo.ico'),
     setupIcon: path.join(root, './public/logo.ico'),
+    certificateFile: path.join(root, './.sign/vpa.pfx'),
+    certificatePassword: 'zhuang0828',
     // exe: '视频发布管理.exe',
   };
 }

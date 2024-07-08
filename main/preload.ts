@@ -13,8 +13,13 @@ function createPreload() {
 
     contextBridge.exposeInMainWorld(field, methods);
   });
-  console.log('preload.js loaded function:');
+  console.log('preload.js loaded handler:');
   console.log({ IPC_INFO });
 }
 
 createPreload();
+
+// 版本更新listener
+contextBridge.exposeInMainWorld('systemMessage', {
+  onVersionCheck: (cb: any) => ipcRenderer.on('version-check', cb),
+});

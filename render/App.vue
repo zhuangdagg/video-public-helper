@@ -37,4 +37,9 @@
   );
   // Listening to page changes and dynamically changing site titles
   useTitle();
+
+  window.systemMessage.onVersionCheck((evt, result, detail) => {
+    console.log('version check:');
+    console.log({ evt, result, detail });
+  });
 </script>

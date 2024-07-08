@@ -13,5 +13,16 @@ declare global {
       login: (key: string) => Promise<UserInfo>;
       publish: (publishInfo: VideoPublishInfo) => Promise<VideoPublishResult>;
     };
+    /**
+     * 系统信息监听
+     */
+    systemMessage: {
+      /**
+       * 监听应用版本更新
+       * @param cb
+       * @returns
+       */
+      onVersionCheck: (cb: (evt: any, status: string, detail?: any) => void) => void;
+    };
   }
 }
