@@ -2,6 +2,7 @@ import { Browser, BrowserContext, Page, chromium, devices } from 'playwright';
 import { ipcMain } from 'electron';
 import { playwrightEnum } from '../handleMap';
 import stroageJson from './storageState.json';
+import mockUserinfo from './userinfo.mock.json';
 import { getTitokUserinfo } from './utils';
 
 const titokConfig: LoginConfig = {
@@ -17,7 +18,9 @@ ipcMain.handle(playwrightEnum.login, async (evt, plationType: string) => {
   switch (plationType) {
     case 'titok':
       handler = useLogin(titokConfig);
-      info = await handler.exec(getTitokUserinfo);
+      // mock
+      info = mockUserinfo as UserInfo;
+      // info = await handler.exec(getTitokUserinfo);
       break;
     default:
       console.log('暂不支持该平台');

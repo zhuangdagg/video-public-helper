@@ -15,6 +15,7 @@
   import { useDarkModeTheme } from '@/hooks/setting/useDarkModeTheme';
   import 'dayjs/locale/zh-cn';
   import { computed } from 'vue';
+  import { VersionCheckResult } from '#/preload.d';
 
   // support Multi-language
   const { getAntdLocale } = useLocale();
@@ -40,6 +41,17 @@
 
   window.systemMessage.onVersionCheck((evt, result, detail) => {
     console.log('version check:');
-    console.log({ evt, result, detail });
+    console.log({ result, detail });
+    switch (result) {
+      case VersionCheckResult.updateDownloaded:
+        break;
+      case VersionCheckResult.updateAvailable:
+        break;
+
+      case VersionCheckResult.updateNotAvailable:
+        break;
+      case VersionCheckResult.error:
+        break;
+    }
   });
 </script>

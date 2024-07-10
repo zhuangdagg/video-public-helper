@@ -42,6 +42,7 @@
   import { useMessage } from '@/hooks/web/useMessage';
   import { useIPC } from '@/hooks/web/useIPC';
   import { createLoading } from '@/components/Loading';
+  import { useLocalforage } from '@/hooks/web/useLocalforage';
 
   import type { UploadProps } from 'ant-design-vue';
   import type { VideoPublishInfo } from '#/video-plation-publish';
@@ -51,6 +52,7 @@
   const { schemas } = useData();
   const { plationPublish } = useIPC();
   const { createMessage } = useMessage();
+  const { publishRecordForage } = useLocalforage();
   const accountTableRef = ref<any>(null);
   const fileList = ref<UploadProps['fileList']>([]);
 

@@ -2,6 +2,13 @@ import { darkModeEnum, handleKeys } from 'main/handle/handleMap';
 import { UserInfo } from 'main/handle/playwright/login';
 import { VideoPublishInfo, VideoPublishResult } from './video-plation-publish';
 export {};
+
+export enum VersionCheckResult {
+  'updateDownloaded' = 'update-downloaded',
+  'updateNotAvailable' = 'update-not-available',
+  'updateAvailable' = 'update-available',
+  'error' = 'error',
+}
 declare global {
   // TODO: 完善类型声明
   interface Window {
@@ -22,7 +29,7 @@ declare global {
        * @param cb
        * @returns
        */
-      onVersionCheck: (cb: (evt: any, status: string, detail?: any) => void) => void;
+      onVersionCheck: (cb: (evt: any, status: VersionCheckResult, detail?: any) => void) => void;
     };
   }
 }

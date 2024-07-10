@@ -7,6 +7,7 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
   import { useLocalforage } from '@/hooks/web/useLocalforage';
+  import { useData } from '../../account/account.data';
   import {
     BasicTable,
     useTable,
@@ -16,24 +17,37 @@
     EditRecordRow,
   } from '@/components/Table';
 
-  const columns: BasicColumn[] = [
-    {
-      title: '账号名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '账号ID',
-      dataIndex: 'accountId',
-    },
-    {
-      title: '账号类型',
-      dataIndex: 'accountType',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-    },
-  ];
+  const { columns } = useData();
+
+  // const columns: BasicColumn[] = [
+  //   {
+  //     title: '',
+  //     dataIndex: 'avatar',
+  //     width: 60,
+  //     customRender: (row) => {
+  //       return h(Avatar, {
+  //         src: row.value,
+  //         shape: 'square',
+  //       });
+  //     },
+  //   },
+  //   {
+  //     title: '账号名称',
+  //     dataIndex: 'name',
+  //   },
+  //   {
+  //     title: '账号ID',
+  //     dataIndex: 'accountId',
+  //   },
+  //   {
+  //     title: '账号类型',
+  //     dataIndex: 'accountType',
+  //   },
+  //   {
+  //     title: '状态',
+  //     dataIndex: 'status',
+  //   },
+  // ];
   const { localforage } = useLocalforage();
   const tableData = ref<any[]>([]);
   const [registerTable, tableMethod] = useTable({
