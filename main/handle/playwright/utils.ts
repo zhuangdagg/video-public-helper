@@ -1,4 +1,4 @@
-import { Page } from 'playwright';
+import { Page, APIRequest } from 'playwright';
 
 /**
  * 判断是否是目标页面
@@ -120,48 +120,3 @@ export interface TitokPersonalProfile {
     };
   };
 }
-
-// {
-//   "douyin_user_verify_info": {
-//       "avatar_url": "https://p3.douyinpic.com/aweme/100x100/aweme-avatar/mosaic-legacy_3791_5070639578.jpeg?from=2956013662",
-//       "douyin_unique_id": "68143622679",
-//       "follower_count": 0,
-//       "following_count": 0,
-//       "is_super_tag_user": false,
-//       "nick_name": "雨的",
-//       "sync_to_xigua": false,
-//       "teen_model": false,
-//       "total_favorited": 0
-//   },
-//   "person_confer_info": {
-//       "to_audit_count": 0,
-//       "valid_count": 0
-//   },
-//   "person_info": {
-//       "category": ""
-//   },
-//   "user_profile": {
-//       "account_region": "",
-//       "avatar_url": "https://p3.douyinpic.com/aweme/100x100/aweme-avatar/mosaic-legacy_3791_5070639578.jpeg?from=2956013662",
-//       "follower_count": 0,
-//       "following_count": 0,
-//       "gender": 0,
-//       "location": "",
-//       "login_with_only_tc": false,
-//       "mobile": "135******15",
-//       "nick_name": "雨的",
-//       "region": "CN",
-//       "school": "",
-//       "secret_id": "MS4wLjABAAAASXaakrxo_FKGgfmFmObzQfWk0wocbrFMqX2P0Z9zOoTUDizM_sQbf1megrgKpVcC",
-//       "signature": "",
-//       "total_favorited": 0,
-//       "unique_id": "68143622679",
-//       "vcd_info": {
-//           "auth_relation_time": 1696482135,
-//           "auth_time": 1696482135,
-//           "aweme_hotsoon_auth": 1,
-//           "aweme_hotsoon_auth_relation": 1,
-//           "register_from": ""
-//       }
-//   }
-// }

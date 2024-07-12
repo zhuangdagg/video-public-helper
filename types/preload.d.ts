@@ -20,6 +20,9 @@ declare global {
       login: (key: string) => Promise<UserInfo>;
       publish: (publishInfo: VideoPublishInfo) => Promise<VideoPublishResult>;
     };
+    videoDownload: {
+      download: (downloadUrl: string) => Promise<any[]>;
+    };
     /**
      * 系统信息监听
      */

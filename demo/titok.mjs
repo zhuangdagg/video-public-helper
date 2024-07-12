@@ -15,9 +15,9 @@ let browserContext;
  */
 let page;
 async function main() {
-  // await openPage();
+  await openPage();
   // await login();
-  await publish();
+  // await publish();
 }
 
 main();
@@ -25,8 +25,8 @@ main();
 async function openPage() {
   browser = await chromium.launch({
     headless: false,
-    // channel: 'msedge',
-    executablePath: './browser/chrome-win/chrome.exe',
+    channel: 'msedge',
+    // executablePath: './browser/chrome-win/chrome.exe',
   });
 
   browserContext = await browser.newContext({
@@ -36,7 +36,7 @@ async function openPage() {
 
   page = await browserContext.newPage();
 
-  await page.goto('https://creator.douyin.com/');
+  await page.goto('https://x.com/'); // https://creator.douyin.com/
 }
 
 async function login() {
