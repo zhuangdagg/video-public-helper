@@ -14,9 +14,11 @@ if (require('electron-squirrel-startup')) {
 // 隐藏原生菜单
 Menu.setApplicationMenu(null);
 
+let mainWindow: BrowserWindow;
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 1024,
     webPreferences: {
@@ -74,3 +76,5 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+export { mainWindow };

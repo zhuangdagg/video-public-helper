@@ -7,10 +7,9 @@ import { spawnSync } from 'node:child_process';
 import { videoDownload } from '../handleMap';
 import { parseM3U8Header, parseM3U8Content } from '../../utils/video';
 
-ipcMain.handle(videoDownload.download, async (evt, downloadUrl) => {
-  const { open, goPage, getM3U8Header, makeDir, fetchM4SStream, m4s2Mp4, close } = useVideoDownload(
-    { downloadUrl },
-  );
+ipcMain.handle(videoDownload.download, async (evt, config: VideoDownloadConfig) => {
+  const { open, goPage, getM3U8Header, makeDir, fetchM4SStream, m4s2Mp4, close } =
+    useVideoDownload(config);
 
   await open();
 
@@ -32,6 +31,7 @@ ipcMain.handle(videoDownload.download, async (evt, downloadUrl) => {
 
 export interface VideoDownloadConfig {
   downloadUrl: string;
+  saveDir: string;
 }
 
 const useVideoDownload = (config: VideoDownloadConfig) => {
@@ -40,7 +40,7 @@ const useVideoDownload = (config: VideoDownloadConfig) => {
   let page: Page;
 
   const tempDir = path.join(process.env.TEMP, './vpa-video');
-  const saveDir = path.join(process.cwd(), './.download');
+  const saveDir = config.saveDir ? config.saveDir : path.join(process.cwd(), './.download');
   const _urls = config.downloadUrl.split('/');
   const saveVideoLocal = path.join(
     saveDir,

@@ -17,32 +17,65 @@
       enter-button="下载"
       @search="onVideoSearch"
     />
-    <ul>
-      <li>下载高清</li>
-      <li>下载普通</li>
-      <li>{{ videoInfo.saveFile }}</li>
-    </ul>
+    <div class="platform-save-path">
+      <span class="label">视频保存至：</span>
+      <span class="path">{{ videoInfo.saveDir }}</span>
+      <Icon @click="onSavePathChange" icon="clarity:note-edit-line" />
+    </div>
+
+    <!-- 日志信息· -->
+    <Textarea
+      v-if="videoInfo.log"
+      class="log-block"
+      disabled
+      :rows="10"
+      :autosize="false"
+      :value="videoInfo.log"
+    ></Textarea>
+
+    <div class="donwload-info" v-if="videoInfo.saveFile">
+      <div><Icon class="down-icon-success" icon="material-symbols:download" />下载完成</div>
+      <div
+        >{{ videoInfo.saveFile }}
+        <Icon icon="ion:open-outline" title="在文件夹打开" @click="openFileInDirectory" />
+      </div>
+      <Button type="primary" class="m-3" @click="toPublishPage">发布该视频</Button>
+    </div>
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
-  import { InputSearch, Button, Tooltip } from 'ant-design-vue';
+  import { InputSearch, Textarea, Tooltip, Button } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Icon from '@/components/Icon/Icon.vue';
 
-  import { reactive } from 'vue';
+  import { reactive, onMounted } from 'vue';
 
   import { useMessage } from '@/hooks/web/useMessage';
+  import { useIPC } from '@/hooks/web/useIPC';
+  import { useRouter } from 'vue-router';
 
   defineOptions({ name: 'VideoDownload' });
 
   const videoInfo = reactive({
-    downloadUrl: 'https://x.com/TheFigen_/status/1811155033259450467',
+    downloadUrl: '',
     loading: false,
     saveFile: '',
+    saveDir: '',
+    log: ``,
   });
 
   const { createMessage } = useMessage();
+  const { directorySelect, systemInfo, openFile } = useIPC();
+  const router = useRouter();
+
+  onMounted(() => {
+    systemInfo.getEnv().then((res) => {
+      if (res && res.APPDATA) {
+        videoInfo.saveDir = res.APPDATA;
+      }
+    });
+  });
 
   const onVideoSearch = async (downloadUrl: string) => {
     console.log({ downloadUrl });
@@ -52,26 +85,90 @@
     }
     try {
       videoInfo.loading = true;
-      videoInfo.saveFile = await window.videoDownload.download(videoInfo.downloadUrl);
+      videoInfo.saveFile = await window.videoDownload.download(videoInfo);
     } catch (err) {
       console.log(err);
     } finally {
       videoInfo.loading = false;
     }
   };
+
+  const onSavePathChange = async () => {
+    const result = await directorySelect();
+    if (result.canceled) return;
+    if (result.filePaths.length) {
+      videoInfo.saveDir = result.filePaths[0];
+    }
+    console.log(result);
+  };
+
+  const openFileInDirectory = async () => {
+    openFile(videoInfo.saveFile);
+  };
+
+  const toPublishPage = async () => {
+    router.push({
+      name: 'ContentPublish',
+      query: {
+        file: videoInfo.saveFile,
+      },
+    });
+  };
 </script>
 
 <style lang="less">
   .platform-video-download {
-    color: @primary-color;
     text-align: center;
     // border: 1px solid;
+
+    .app-iconify {
+      cursor: pointer;
+      color: @primary-color;
+      padding: 0 10px;
+      font-size: 18px;
+
+      :hover {
+        color: lighten(@primary-color, 20%);
+      }
+    }
     .head {
+      color: @primary-color;
       margin: 30px 0;
       font-size: 26px;
       font-weight: 600;
       text-align: center;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .platform-save-path {
+      margin: 0px auto 0;
+      padding: 0 10px;
+      width: 70%;
+      text-align: start;
+      // height: 40px;
+      line-height: 40px;
+      > .label {
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .log-block {
+      width: 70%;
+    }
+
+    .donwload-info {
+      margin-top: 20px;
+      > :nth-child(1) {
+        margin-top: 10px;
+        color: @primary-color;
+        font-size: 26px;
+        font-weight: 500px;
+      }
+
+      > :nth-child(1) {
+        margin: 10px;
+        color: @primary-color;
+      }
     }
 
     .search-input-bar {

@@ -1,6 +1,7 @@
 import { darkModeEnum, handleKeys } from 'main/handle/handleMap';
 import { UserInfo } from 'main/handle/playwright/login';
 import { VideoPublishInfo, VideoPublishResult } from './video-plation-publish';
+import { VideoDownloadConfig } from 'main/handle/playwright/videoDownload';
 export {};
 
 export enum VersionCheckResult {
@@ -9,6 +10,7 @@ export enum VersionCheckResult {
   'updateAvailable' = 'update-available',
   'error' = 'error',
 }
+
 declare global {
   // TODO: 完善类型声明
   interface Window {
@@ -21,7 +23,7 @@ declare global {
       publish: (publishInfo: VideoPublishInfo) => Promise<VideoPublishResult>;
     };
     videoDownload: {
-      download: (downloadUrl: string) => Promise<any[]>;
+      download: (config: VideoDownloadConfig) => Promise<string>;
     };
     /**
      * 系统信息监听
@@ -33,6 +35,16 @@ declare global {
        * @returns
        */
       onVersionCheck: (cb: (evt: any, status: VersionCheckResult, detail?: any) => void) => void;
+    };
+
+    showDialog: {
+      directorySelect: () => Promise<Electron.OpenDialogReturnValue>;
+      openFile: (filePath: string) => Promise<boolean>;
+    };
+
+    systemInfo: {
+      getEnv: () => Promise<NodeJS.ProcessEnv>;
+      getCwd: () => Promise<string>;
     };
   }
 }

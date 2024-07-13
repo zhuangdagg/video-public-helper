@@ -13,6 +13,16 @@ export const videoDownload = {
   download: 'videoDownload:download',
 };
 
+export const showDialog = {
+  directorySelect: 'showDialog:directorySelect',
+  openFile: 'showDialog:openFile',
+};
+
+export const systemInfo = {
+  getEnv: 'systemInfo:getEnv',
+  getCwd: 'systemInfo:getCwd',
+};
+
 /**
  * @example window.darkMode.toggle()
  */
@@ -20,4 +30,6 @@ export const handleKeys: Record<string, object> = {
   darkMode: darkModeEnum,
   playwright: playwrightEnum,
   videoDownload,
+  showDialog,
+  systemInfo,
 };
