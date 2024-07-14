@@ -18,5 +18,11 @@ export function useIPC() {
 
     directorySelect: window.showDialog?.directorySelect,
     openFile: window.showDialog?.openFile,
+    /** 推特视频下载 */
+    downloadVideo: window.videoDownload?.download,
+
+    // 监听回调定义
+    onVersionCheck: window.systemMessage?.onVersionCheck,
+    onLog: window.systemMessage?.onLog,
   };
 }

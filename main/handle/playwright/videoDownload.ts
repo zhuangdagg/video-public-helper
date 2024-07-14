@@ -6,26 +6,27 @@ import { spawnSync } from 'node:child_process';
 
 import { videoDownload } from '../handleMap';
 import { parseM3U8Header, parseM3U8Content } from '../../utils/video';
+import { sendWindowLog } from '../../utils';
 
 ipcMain.handle(videoDownload.download, async (evt, config: VideoDownloadConfig) => {
   const { open, goPage, getM3U8Header, makeDir, fetchM4SStream, m4s2Mp4, close } =
     useVideoDownload(config);
-
+  sendWindowLog('video-download-log', '读取配置');
   await open();
-
+  sendWindowLog('video-download-log', '打开浏览器');
   await goPage();
-
+  sendWindowLog('video-download-log', '打开视频页面');
   const m3u8_header = await getM3U8Header();
-
+  sendWindowLog('video-download-log', '读取视频数据');
   await makeDir();
-
+  sendWindowLog('video-download-log', '开始下载...');
   await Promise.all([
     fetchM4SStream(m3u8_header[0]['URL']),
     fetchM4SStream(m3u8_header[0]['AUDIO']['URI']),
   ]);
-
+  sendWindowLog('video-download-log', '处理视频数据...');
   await m4s2Mp4();
-
+  sendWindowLog('video-download-log', '视频数据下载完成');
   return await close();
 });
 
@@ -40,7 +41,7 @@ const useVideoDownload = (config: VideoDownloadConfig) => {
   let page: Page;
 
   const tempDir = path.join(process.env.TEMP, './vpa-video');
-  const saveDir = config.saveDir ? config.saveDir : path.join(process.cwd(), './.download');
+  const saveDir = path.join(config.saveDir || process.cwd(), './download');
   const _urls = config.downloadUrl.split('/');
   const saveVideoLocal = path.join(
     saveDir,
@@ -99,8 +100,9 @@ const useVideoDownload = (config: VideoDownloadConfig) => {
   const makeDir = () => {
     // 清除下载文件夹
     fs.rmSync(tempDir, { recursive: true, force: true });
-    fs.mkdirSync(tempDir);
-    fs.mkdirSync(saveDir);
+    fs.mkdirSync(tempDir, { recursive: true });
+    fs.mkdirSync(saveDir, { recursive: true });
+    // if(fs.statfsSync)
   };
 
   async function _fetchM3U8Content(url: string) {

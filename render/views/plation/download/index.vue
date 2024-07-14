@@ -66,30 +66,40 @@
   });
 
   const { createMessage } = useMessage();
-  const { directorySelect, systemInfo, openFile } = useIPC();
+  const { directorySelect, systemInfo, openFile, onLog, downloadVideo } = useIPC();
   const router = useRouter();
 
   onMounted(() => {
     systemInfo.getEnv().then((res) => {
-      if (res && res.APPDATA) {
-        videoInfo.saveDir = res.APPDATA;
+      if (res && res.videoAppData) {
+        videoInfo.saveDir = res.videoAppData;
       }
     });
   });
 
   const onVideoSearch = async (downloadUrl: string) => {
-    console.log({ downloadUrl });
+    videoInfo.saveFile = '';
+    videoInfo.log = '';
     if (!videoInfo.downloadUrl) {
       createMessage.warning('请输入下载链接');
       return;
     }
+    let offLog: Function;
     try {
       videoInfo.loading = true;
-      videoInfo.saveFile = await window.videoDownload.download(videoInfo);
+      offLog = onLog('video-download-log', (evt, msg) => {
+        console.log('video-download-log: ', msg);
+        videoInfo.log += msg + '\n';
+      });
+      videoInfo.saveFile = await downloadVideo({
+        downloadUrl: videoInfo.downloadUrl,
+        saveDir: videoInfo.saveDir,
+      });
     } catch (err) {
       console.log(err);
     } finally {
       videoInfo.loading = false;
+      offLog?.();
     }
   };
 

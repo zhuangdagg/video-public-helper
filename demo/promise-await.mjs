@@ -19,6 +19,6 @@ async function execLongTimeTask() {
 
 (async function main() {
   // await execLongTimeTask();
-  fs.rmSync(path.join(process.cwd(), './demo/download'), { recursive: true, force: true });
-  fs.mkdirSync(path.join(process.cwd(), './demo/download'));
+  // fs.rmSync(path.join(process.cwd(), './demo/download'), { recursive: true, force: true });
+  fs.mkdirSync(path.join(process.cwd(), './demo/download/123'), { recursive: true });
 })();

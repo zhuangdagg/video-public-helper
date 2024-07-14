@@ -21,5 +21,18 @@ createPreload();
 
 // 版本更新listener
 contextBridge.exposeInMainWorld('systemMessage', {
-  onVersionCheck: (cb: any) => ipcRenderer.on('version-check', cb),
+  onVersionCheck: (cb: any) => {
+    ipcRenderer.on('version-check', cb);
+
+    return function off() {
+      ipcRenderer.off('version-check', cb);
+    };
+  },
+  onLog: (type: string, cb: any) => {
+    ipcRenderer.on(type, cb);
+
+    return function off() {
+      ipcRenderer.off(type, cb);
+    };
+  },
 });

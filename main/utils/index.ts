@@ -1,1 +1,1 @@
-import { app } from 'electron';
+export * from './log';

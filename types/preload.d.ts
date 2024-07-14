@@ -2,6 +2,7 @@ import { darkModeEnum, handleKeys } from 'main/handle/handleMap';
 import { UserInfo } from 'main/handle/playwright/login';
 import { VideoPublishInfo, VideoPublishResult } from './video-plation-publish';
 import { VideoDownloadConfig } from 'main/handle/playwright/videoDownload';
+import { onLogType } from 'main/utils/log';
 export {};
 
 export enum VersionCheckResult {
@@ -34,7 +35,13 @@ declare global {
        * @param cb
        * @returns
        */
-      onVersionCheck: (cb: (evt: any, status: VersionCheckResult, detail?: any) => void) => void;
+      onVersionCheck: (
+        cb: (evt: any, status: VersionCheckResult, detail?: any) => void,
+      ) => () => void;
+      onLog: (
+        type: onLogType,
+        cb: (evt: Electron.IpcRendererEvent, message: string) => void,
+      ) => () => void;
     };
 
     showDialog: {

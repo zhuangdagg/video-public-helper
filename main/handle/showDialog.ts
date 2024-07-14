@@ -11,5 +11,6 @@ ipcMain.handle(showDialog.directorySelect, async (evt) => {
 });
 
 ipcMain.handle(showDialog.openFile, async (evt, filePath: string) => {
-  return shell.openPath(filePath);
+  console.log({ filePath });
+  return shell.showItemInFolder(filePath);
 });
