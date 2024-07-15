@@ -44,6 +44,7 @@ export interface UserInfo {
   fans?: number;
   status: 0 | 1;
   accountType: any;
+  avatar?: string;
   origin?: Record<string, any>;
 }
 

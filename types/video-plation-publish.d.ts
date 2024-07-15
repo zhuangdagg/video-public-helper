@@ -18,7 +18,9 @@ export interface VideoPublishInfo {
 }
 
 export interface VideoPublishResult {
+  publishId: string;
   accountId: string;
+  accountType: string;
   name?: string;
   result: 'success' | 'failure';
   time: string;

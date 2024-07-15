@@ -3,7 +3,12 @@
     <h1 class="head"
       >下载 Twitter 视频
       <Tooltip>
-        <template #title>需要搭建能访问 twitter 的网络环境</template>
+        <template #title>
+          <ul>
+            <li>1. 需要搭建能访问 twitter 的网络环境</li>
+            <li>2. 需要下载安装ffmpeg软件</li>
+          </ul>
+        </template>
         <Icon icon="fe:warning" />
       </Tooltip>
     </h1>

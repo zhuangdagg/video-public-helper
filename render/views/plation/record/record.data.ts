@@ -15,18 +15,15 @@ const PlationLogos: Record<string, string> = {
 
 const columns: BasicColumn[] = [
   {
-    title: '',
-    dataIndex: 'avatar',
-    width: 60,
-    customRender: (row) => {
-      return h(Avatar, {
-        src: row.value,
-        shape: 'square',
-      });
-    },
+    title: '发布时间',
+    dataIndex: 'time',
   },
   {
-    title: '账号',
+    title: '内容标题',
+    dataIndex: 'title',
+  },
+  {
+    title: '账号名称',
     dataIndex: 'name',
     align: 'left',
   },
@@ -51,16 +48,17 @@ const columns: BasicColumn[] = [
     dataIndex: 'accountId',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
+    title: '发布结果',
+    dataIndex: 'result',
     customRender: (row) => {
+      const isSuccess = row.value === 'success';
       return h(
         Tag,
         {
           bordered: false,
-          color: row.value ? 'red' : 'green',
+          color: isSuccess ? 'green' : 'red',
         },
-        row.value ? '登录失效' : '正常',
+        isSuccess ? '发布成功' : '发布失败',
       );
     },
   },

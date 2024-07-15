@@ -48,7 +48,7 @@
   //     dataIndex: 'status',
   //   },
   // ];
-  const { localforage } = useLocalforage();
+  const { accountForage } = useLocalforage();
   const tableData = ref<any[]>([]);
   const [registerTable, tableMethod] = useTable({
     columns: columns,
@@ -72,7 +72,7 @@
 
   const fetchTableData = () => {
     const _list: any = [];
-    localforage
+    accountForage
       .iterate((val, key, index) => {
         _list.push(val);
       })

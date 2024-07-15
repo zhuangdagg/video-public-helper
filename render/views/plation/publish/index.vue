@@ -35,7 +35,7 @@
   import { PageWrapper } from '@/components/Page';
   import { BasicForm, useForm } from '@/components/Form';
   import accountTable from './component/accountTable.vue';
-  import { ref, unref } from 'vue';
+  import { ref, unref, onMounted } from 'vue';
 
   // data
   import { useData } from './publish.data';
@@ -43,9 +43,10 @@
   import { useIPC } from '@/hooks/web/useIPC';
   import { createLoading } from '@/components/Loading';
   import { useLocalforage } from '@/hooks/web/useLocalforage';
+  import { useRoute, useRouter } from 'vue-router';
 
   import type { UploadProps } from 'ant-design-vue';
-  import type { VideoPublishInfo } from '#/video-plation-publish';
+  import type { VideoPublishInfo, VideoPublishResult } from '#/video-plation-publish';
 
   defineOptions({ name: 'ContentPublish' });
 
@@ -53,6 +54,8 @@
   const { plationPublish } = useIPC();
   const { createMessage } = useMessage();
   const { publishRecordForage } = useLocalforage();
+  const route = useRoute();
+  const router = useRouter();
   const accountTableRef = ref<any>(null);
   const fileList = ref<UploadProps['fileList']>([]);
 
@@ -64,6 +67,23 @@
     },
     schemas,
     showActionButtonGroup: false,
+  });
+
+  onMounted(() => {
+    const _path = route.query?.file;
+    console.log(_path);
+    if (_path) {
+      fileList.value = [
+        {
+          uid: _path,
+          name: _path,
+          fileName: _path,
+          originFileObj: {
+            path: _path,
+          },
+        },
+      ] as any;
+    }
   });
 
   const beforeUpload: UploadProps['beforeUpload'] = (file) => {
@@ -106,12 +126,23 @@
       .then((result) => {
         createMessage.success('发布操作完成');
         console.log({ result });
+        savePublishRecord(result);
         //   // TODO:
         //   // 生成发布记录， 跳转发布结果
       }, console.error)
       .finally(() => {
         globalLoading.close();
       });
+  };
+
+  const savePublishRecord = async (result: VideoPublishResult[] = []) => {
+    await Promise.all(
+      result.map((info) => {
+        publishRecordForage.setItem(info.publishId, info);
+      }),
+    );
+
+    router.push({ name: 'PublishRecord' });
   };
 </script>
 

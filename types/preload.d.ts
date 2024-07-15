@@ -21,7 +21,7 @@ declare global {
     };
     playwright: {
       login: (key: string) => Promise<UserInfo>;
-      publish: (publishInfo: VideoPublishInfo) => Promise<VideoPublishResult>;
+      publish: (publishInfo: VideoPublishInfo) => Promise<VideoPublishResult[]>;
     };
     videoDownload: {
       download: (config: VideoDownloadConfig) => Promise<string>;

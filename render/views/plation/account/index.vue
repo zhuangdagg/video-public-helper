@@ -72,7 +72,7 @@
 
   const { columns, formSchemas } = useData();
   const { createMessage } = useMessage();
-  const { localforage, accountForage } = useLocalforage();
+  const { accountForage } = useLocalforage();
   const { accountLogin } = useIPC();
   const { accountAdd } = useVideoPublishStore();
   const globalLoading = createLoading({ tip: '请在浏览器完成登录操作' });
@@ -83,12 +83,10 @@
     lastsyncTime: 0,
   });
 
-  const tableData = ref<object[]>([]);
-
   const fetchTableData = () => {
     return new Promise((resolve, reject) => {
       const _list: any = [];
-      localforage
+      accountForage
         .iterate((val, key, index) => {
           _list.push(val);
         })
@@ -146,9 +144,9 @@
       globalLoading.open();
       const userInfo = await accountLogin('titok');
       // window.darkMode.toggle('tttt');
-      await localforage.setItem(String(userInfo.accountId), userInfo);
+      await accountForage.setItem(String(userInfo.accountId), userInfo);
       console.log(userInfo);
-      await accountAdd(userInfo);
+      // await accountAdd(userInfo);
       createMessage.warning('新增账号成功');
       nextTick(() => {
         // fetchTableData();
@@ -180,7 +178,7 @@
 
   const handleDelete = async (record: any) => {
     console.log(record);
-    await localforage.removeItem(record.accountId);
+    await accountForage.removeItem(record.accountId);
 
     nextTick(() => {
       // fetchTableData();

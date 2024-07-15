@@ -31,7 +31,7 @@ const handlePublish = async (account: PlationAccountInfo, info: PublishContent) 
 };
 
 const handleTitokPublish = async (account: PlationAccountInfo, content: PublishContent) => {
-  const { storageState, accountId, name } = account;
+  const { storageState, accountId, name, accountType } = account;
   const result: VideoPublishResult = {
     accountId,
     name,
@@ -39,6 +39,8 @@ const handleTitokPublish = async (account: PlationAccountInfo, content: PublishC
     time: '',
     title: content.title || '',
     detail: [],
+    accountType,
+    publishId: `${accountId}-${Date.now}`,
   };
   const config = {
     publishUrl: 'https://creator.douyin.com/creator-micro/content/publish',
@@ -72,7 +74,7 @@ function usePublish(config: PublishConfig, log: any[]) {
    */
   const open = async (storageStateStr: string) => {
     browser = await chromium.launch({
-      headless: true, // 打开页面
+      headless: false, // 打开页面
       channel: 'msedge',
     });
     log.push('browser launched');
@@ -133,23 +135,40 @@ function usePublish(config: PublishConfig, log: any[]) {
       throw new Error('file input error');
     }
     log.push('publish content input done all');
-    await waitVideoLoaded(10); // 等待10分钟
+    const stop = tryPublishClick(10); // 等待10分钟
+
+    log.push('waiting publish');
+    try {
+      await page.waitForURL(
+        (url) => {
+          return url.href.indexOf('/manage') > -1;
+        },
+        {
+          timeout: 10 * 60 * 1000,
+          waitUntil: 'load',
+        },
+      );
+    } catch (err) {
+      throw new Error('发布超时');
+    } finally {
+      stop();
+    }
     console.log('publish success');
   };
 
-  async function waitVideoLoaded(cnt: number) {
-    if (cnt < 0) {
-      throw new Error('file upload timeoutError');
-    }
-    try {
-      await page.waitForURL('**/manage', { timeout: 60000, waitUntil: 'domcontentloaded' });
-      log.push('waiting publish');
-    } catch (err) {
-      if (err instanceof errors.TimeoutError) {
+  function tryPublishClick(cnt: number) {
+    let _timer = setInterval(async () => {
+      try {
         await page.getByRole('button', { name: '发布', exact: true })?.click();
-        await waitVideoLoaded(cnt - 1);
+        console.log('click su');
+      } catch (err) {
+        console.log('click err');
       }
-    }
+    }, 1000 * 20);
+
+    return function stop() {
+      clearInterval(_timer);
+    };
   }
 
   return {

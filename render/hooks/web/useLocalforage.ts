@@ -5,7 +5,7 @@ import { useUserStore } from '@/store/modules/user';
 export function useLocalforage(
   config: LocalForageOptions = {
     driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
-    name: 'USERINFO',
+    name: 'default',
   },
 ): { [key: string]: LocalForage } {
   const userId = useUserStore().getUserInfo.id;
