@@ -2,19 +2,19 @@
   <div v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
+      <FormItem name="name" class="enter-x">
         <Input
           class="fix-auto-fill"
           size="large"
-          v-model:value="formData.account"
-          :placeholder="t('sys.login.userName')"
+          v-model:value="formData.name"
+          placeholder="账号名称"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
+      <FormItem name="email" class="enter-x">
         <Input
           size="large"
-          v-model:value="formData.mobile"
-          :placeholder="t('sys.login.mobile')"
+          v-model:value="formData.email"
+          placeholder="邮箱地址"
           class="fix-auto-fill"
         />
       </FormItem>
@@ -23,6 +23,7 @@
           size="large"
           class="fix-auto-fill"
           v-model:value="formData.sms"
+          :sendCodeApi="sendCode"
           :placeholder="t('sys.login.smsCode')"
         />
       </FormItem>
@@ -73,26 +74,28 @@
   import { CountdownInput } from '@/components/CountDown';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { sendCodeApi, RegisterApi } from '@/api/sys/user';
+  import { useMessage } from '@/hooks/web/useMessage';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { handleBackLogin, getLoginState } = useLoginState();
+  const { handleBackLogin, getLoginState, setLoginState } = useLoginState();
 
   const formRef = ref();
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    name: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
+    email: '',
     sms: '',
     policy: false,
   });
 
   const { getFormRules } = useFormRules(formData);
-  const { validForm } = useFormValid(formRef);
+  const { validForm, validate } = useFormValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
 
@@ -100,5 +103,18 @@
     const data = await validForm();
     if (!data) return;
     console.log(data);
+    data.role = 'vpaUser';
+    await RegisterApi(data);
+
+    useMessage().createMessage.success('注册成功，请登录');
+    setLoginState(LoginStateEnum.LOGIN);
   }
+
+  const sendCode = async () => {
+    await validate.value('email');
+
+    await sendCodeApi({ key: formData.email, type: 'email' });
+
+    return true;
+  };
 </script>

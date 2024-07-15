@@ -15,6 +15,11 @@ export interface LoginParams {
   type: LoginStateEnum;
 }
 
+export interface SendCodeParams {
+  type: 'email' | 'phone';
+  key: string;
+}
+
 export interface RoleInfo {
   roleName: string;
   value: string;

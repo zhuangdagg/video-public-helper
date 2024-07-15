@@ -19,8 +19,8 @@ ipcMain.handle(playwrightEnum.login, async (evt, plationType: string) => {
     case 'titok':
       handler = useLogin(titokConfig);
       // mock
-      info = mockUserinfo as UserInfo;
-      // info = await handler.exec(getTitokUserinfo);
+      // info = mockUserinfo as UserInfo;
+      info = await handler.exec(getTitokUserinfo);
       break;
     default:
       console.log('暂不支持该平台');

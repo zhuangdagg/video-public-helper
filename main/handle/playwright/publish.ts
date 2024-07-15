@@ -116,7 +116,7 @@ function usePublish(config: PublishConfig, log: any[]) {
    */
   const publishTitok = async (publishContent: PublishContent) => {
     try {
-      await page.getByPlaceholder('好的作品标题可获得更多浏览').fill(publishContent.title);
+      await page.getByPlaceholder('填写作品标题，为作品获得更多流量').fill(publishContent.title);
       log.push('title input done');
       const locat = await page.locator('.editor-kit-outer-container > div[contenteditable="true"]');
       await locat.fill(publishContent.desc);
