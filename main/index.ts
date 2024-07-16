@@ -33,7 +33,7 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
-  if (__DEV__) {
+  if (true || __DEV__) {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   }

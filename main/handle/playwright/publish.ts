@@ -40,7 +40,7 @@ const handleTitokPublish = async (account: PlationAccountInfo, content: PublishC
     title: content.title || '',
     detail: [],
     accountType,
-    publishId: `${accountId}-${Date.now}`,
+    publishId: `${accountId}-${Date.now()}`,
   };
   const config = {
     publishUrl: 'https://creator.douyin.com/creator-micro/content/publish',
@@ -74,7 +74,7 @@ function usePublish(config: PublishConfig, log: any[]) {
    */
   const open = async (storageStateStr: string) => {
     browser = await chromium.launch({
-      headless: false, // 打开页面
+      headless: true, // 打开页面
       channel: 'msedge',
     });
     log.push('browser launched');

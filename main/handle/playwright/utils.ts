@@ -26,6 +26,7 @@ export const getTitokUserinfo = async (page: Page, userInfo: Record<string, any>
         response.status() == 200
       ) {
         const data = response.request().postDataJSON();
+
         return data && data.module_key_list && data.module_key_list.includes('PERSONAL_PROFILE');
       }
 
@@ -46,6 +47,7 @@ export const getTitokUserinfo = async (page: Page, userInfo: Record<string, any>
 
     return userProfile as TitokPersonalProfile['user_profile'];
   } catch (err) {
+    console.error('获取用户信息失败');
     return {} as TitokPersonalProfile['user_profile'];
   }
 };

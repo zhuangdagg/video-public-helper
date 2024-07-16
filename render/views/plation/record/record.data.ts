@@ -51,14 +51,13 @@ const columns: BasicColumn[] = [
     title: '发布结果',
     dataIndex: 'result',
     customRender: (row) => {
-      const isSuccess = row.value === 'success';
       return h(
         Tag,
         {
           bordered: false,
-          color: isSuccess ? 'green' : 'red',
+          color: row.value === 'success' ? 'green' : 'red',
         },
-        isSuccess ? '发布成功' : '发布失败',
+        row.value === 'success' ? '发布成功' : '发布失败',
       );
     },
   },

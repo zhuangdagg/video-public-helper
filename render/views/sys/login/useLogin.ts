@@ -46,7 +46,7 @@ export function useFormValid<T extends Object = any>(formRef: Ref<FormInstance>)
 
 export function useFormRules(formData?: Recordable) {
   const { t } = useI18n();
-
+  const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
@@ -93,7 +93,7 @@ export function useFormRules(formData?: Recordable) {
       // register form rules
       case LoginStateEnum.REGISTER:
         return {
-          name: accountFormRule,
+          name: [{ validator: validateName, trigger: 'change' }],
           password: passwordFormRule,
           confirmPassword: [
             { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
