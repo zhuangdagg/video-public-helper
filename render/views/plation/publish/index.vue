@@ -127,8 +127,6 @@
         createMessage.success('发布操作完成');
         console.log({ result });
         savePublishRecord(result);
-        //   // TODO:
-        //   // 生成发布记录， 跳转发布结果
       }, console.error)
       .finally(() => {
         globalLoading.close();

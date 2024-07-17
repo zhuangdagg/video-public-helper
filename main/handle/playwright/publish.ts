@@ -17,17 +17,19 @@ ipcMain.handle(playwrightEnum.publish, async (evt, publishInfo: VideoPublishInfo
 type PublishContent = Omit<VideoPublishInfo, 'account'>;
 
 const handlePublish = async (account: PlationAccountInfo, info: PublishContent) => {
+  let result = {} as VideoPublishResult;
   switch (account.accountType) {
     case 'titok':
-      return await handleTitokPublish(account, info);
+      result = await handleTitokPublish(account, info);
       break;
     case 'bilibili':
+      result = await handleBilibiliPublish(account, info);
       break;
 
     default:
       console.error('发布信息无法识别账号类型');
-      return {} as VideoPublishResult;
   }
+  return result;
 };
 
 const handleTitokPublish = async (account: PlationAccountInfo, content: PublishContent) => {
@@ -51,6 +53,36 @@ const handleTitokPublish = async (account: PlationAccountInfo, content: PublishC
     await publishTitok(content);
     result.result = 'success';
     result.time = new Date().toDateString();
+    result.detail.push('publish success');
+  } catch (err) {
+    result.result = err;
+  } finally {
+    await close();
+  }
+  return result;
+};
+
+const handleBilibiliPublish = async (account: PlationAccountInfo, content: PublishContent) => {
+  const { storageState, accountId, name, accountType } = account;
+  const result: VideoPublishResult = {
+    accountId,
+    name,
+    result: 'failure',
+    time: '',
+    title: content.title || '',
+    detail: [],
+    accountType,
+    publishId: `${accountId}-${Date.now()}`,
+  };
+  const config = {
+    publishUrl: 'https://member.bilibili.com/platform/upload/video/frame',
+  };
+  const { open, publishBilibili, close } = usePublish(config, result.detail);
+  try {
+    await open(storageState);
+    await publishBilibili(content);
+    result.result = 'success';
+    result.time = new Date().toUTCString();
     result.detail.push('publish success');
   } catch (err) {
     result.result = err;
@@ -156,10 +188,14 @@ function usePublish(config: PublishConfig, log: any[]) {
     console.log('publish success');
   };
 
-  function tryPublishClick(cnt: number) {
+  function tryPublishClick(
+    submit: (page: Page) => Promise<any> = async (page) => {
+      return await page.getByRole('button', { name: '发布', exact: true })?.click();
+    },
+  ) {
     let _timer = setInterval(async () => {
       try {
-        await page.getByRole('button', { name: '发布', exact: true })?.click();
+        await submit(page);
         console.log('click su');
       } catch (err) {
         console.log('click err');
@@ -171,9 +207,79 @@ function usePublish(config: PublishConfig, log: any[]) {
     };
   }
 
+  /**
+   * 发布B站视频
+   * @param publishContent
+   */
+  const publishBilibili = async (publishContent: PublishContent) => {
+    try {
+      await page
+        .locator(
+          'div#video-up-app input[accept=".mp4,.flv,.avi,.wmv,.mov,.webm,.mpeg4,.ts,.mpg,.rm,.rmvb,.mkv,.m4v"]',
+        )
+        ?.setInputFiles(publishContent.filePath);
+      log.push('file input done');
+    } catch (err) {
+      console.error(err);
+      throw new Error('file input error');
+    }
+
+    try {
+      await page.getByPlaceholder('请输入稿件标题').fill(publishContent.title);
+      log.push('title input done');
+
+      // 描述
+      const locat = await page.locator(
+        'div[editor_id="desc_at_editor"] div[contenteditable="true"].ql-editor',
+      );
+      await locat.fill(publishContent.desc);
+      log.push('desc input done');
+
+      // 标签
+      const tipInput = await page.getByRole('textbox', { name: '按回车键Enter创建标签' });
+
+      await new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          resolve('');
+        }, 6000);
+      });
+
+      await tipInput.fill('6666');
+      await tipInput.press('Enter');
+      console.log('666');
+    } catch (err) {
+      console.error(err);
+      throw new Error('publish content input error');
+    }
+
+    log.push('publish content input done all');
+
+    const stop = tryPublishClick(async (page) => {
+      return await page.getByText('立即投稿')?.click();
+    });
+
+    log.push('waiting publish');
+    try {
+      await page.waitForResponse(
+        (response) => {
+          return response.url().indexOf('/web/add/v3') > -1;
+        },
+        {
+          timeout: 10 * 60 * 1000,
+        },
+      );
+    } catch (err) {
+      throw new Error('发布超时');
+    } finally {
+      stop();
+    }
+    console.log('publish success');
+  };
+
   return {
     open,
     publishTitok,
+    publishBilibili,
     close,
   };
 }

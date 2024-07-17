@@ -3,12 +3,18 @@ import { ipcMain } from 'electron';
 import { playwrightEnum } from '../handleMap';
 import stroageJson from './storageState.json';
 import mockUserinfo from './userinfo.mock.json';
-import { getTitokUserinfo } from './utils';
+import { getTitokUserinfo, getBiliUserinfo } from './utils';
 
 const titokConfig: LoginConfig = {
   loginUrl: 'https://creator.douyin.com/',
   waitForUrl: '**/home',
   accountType: 'titok',
+};
+
+const bilibiliConfig: LoginConfig = {
+  loginUrl: 'https://passport.bilibili.com/login',
+  waitForUrl: 'https://www.bilibili.com/',
+  accountType: 'bilibili',
 };
 
 ipcMain.handle(playwrightEnum.login, async (evt, plationType: string) => {
@@ -21,6 +27,10 @@ ipcMain.handle(playwrightEnum.login, async (evt, plationType: string) => {
       // mock
       // info = mockUserinfo as UserInfo;
       info = await handler.exec(getTitokUserinfo);
+      break;
+    case 'bilibili':
+      handler = useLogin(bilibiliConfig);
+      info = await handler.exec(getBiliUserinfo);
       break;
     default:
       console.log('暂不支持该平台');

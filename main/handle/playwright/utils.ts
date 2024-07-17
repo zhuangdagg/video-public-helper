@@ -122,3 +122,43 @@ export interface TitokPersonalProfile {
     };
   };
 }
+
+/**
+ * 获取bili用户信息
+ *【页面】https://account.bilibili.com/account/home
+ *【接口信息】GET https://api.bilibili.com/x/web-interface/nav?web_location=33
+ * @param page
+ */
+export const getBiliUserinfo = async (page: Page, userInfo: Record<string, any>) => {
+  await page.goto('https://account.bilibili.com/account/home');
+  try {
+    const res = await page.waitForResponse((response) => {
+      if (
+        response.url().indexOf('/web-interface/nav') > -1 &&
+        response.request().method() === 'GET' &&
+        response.status() == 200
+      ) {
+        console.log(response.url(), '-- response url');
+
+        return true;
+      }
+
+      return false;
+    });
+
+    const { data } = (await res.json()) as any;
+    const userProfile = data || {};
+
+    // 赋值
+    userInfo.origin = userProfile;
+    userInfo.name = userProfile.uname;
+    userInfo.accountId = userProfile.mid;
+    userInfo.fans = 0;
+    userInfo.avatar = userProfile.face;
+
+    return userProfile as TitokPersonalProfile['user_profile'];
+  } catch (err) {
+    console.error('获取用户信息失败');
+    return {} as TitokPersonalProfile['user_profile'];
+  }
+};

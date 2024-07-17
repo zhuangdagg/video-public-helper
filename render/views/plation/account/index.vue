@@ -127,10 +127,11 @@
     console.log(evt);
     switch (evt.key) {
       case PlationTypeEnum.TITOK:
-        addTitokAccount();
+        addPlatformAccount(evt.key);
         break;
-      // case PlationTypeEnum.BILIBILI:
-      //   break;
+      case PlationTypeEnum.BILIBILI:
+        addPlatformAccount(evt.key);
+        break;
       default:
         createMessage.warning('暂不支持该平台账号添加');
     }
@@ -139,11 +140,10 @@
   /**
    * 添加抖音账号
    */
-  const addTitokAccount = async () => {
+  const addPlatformAccount = async (key: string) => {
     try {
       globalLoading.open();
-      const userInfo = await accountLogin('titok');
-      // window.darkMode.toggle('tttt');
+      const userInfo = await accountLogin(key);
       await accountForage.setItem(String(userInfo.accountId), userInfo);
       console.log(userInfo);
       // await accountAdd(userInfo);
@@ -152,6 +152,30 @@
         // fetchTableData();
         tableMethod.reload();
       });
+    } catch (err) {
+      console.log(err);
+      createMessage.warning('新增账号失败');
+    } finally {
+      globalLoading.close();
+    }
+  };
+
+  /**
+   *测试用
+   */
+  const addTestAccount = async (key: string) => {
+    try {
+      globalLoading.open();
+      const userInfo = await accountLogin(key);
+      console.log(userInfo);
+      // await accountForage.setItem(String(userInfo.accountId), userInfo);
+      //
+      // // await accountAdd(userInfo);
+      // createMessage.warning('新增账号成功');
+      // nextTick(() => {
+      //   // fetchTableData();
+      //   tableMethod.reload();
+      // });
     } catch (err) {
       console.log(err);
       createMessage.warning('新增账号失败');
