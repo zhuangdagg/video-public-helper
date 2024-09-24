@@ -19,10 +19,14 @@ const columns: BasicColumn[] = [
     dataIndex: 'avatar',
     width: 60,
     customRender: (row) => {
-      return h(Avatar, {
-        src: row.value,
-        shape: 'square',
-      });
+      return h(
+        Avatar,
+        {
+          src: row.value,
+          shape: 'square',
+        },
+        () => undefined,
+      );
     },
   },
   {
@@ -39,11 +43,15 @@ const columns: BasicColumn[] = [
     //   return (PlationNames as any)[text] || '';
     // },
     customRender: (row) => {
-      return h(Avatar, {
-        src: PlationLogos[row.value],
-        shape: 'square',
-        title: PlationNames[row.value] || '',
-      });
+      return h(
+        Avatar,
+        {
+          src: PlationLogos[row.value],
+          shape: 'square',
+          title: PlationNames[row.value] || '',
+        },
+        () => '',
+      );
     },
   },
   {
@@ -60,7 +68,7 @@ const columns: BasicColumn[] = [
           bordered: false,
           color: row.value ? 'red' : 'green',
         },
-        row.value ? '登录失效' : '正常',
+        () => (row.value ? '登录失效' : '正常'),
       );
     },
   },

@@ -6,11 +6,19 @@ import { VideoPublishInfo, VideoPublishResult, PlationAccountInfo } from '#/vide
 
 ipcMain.handle(playwrightEnum.publish, async (evt, publishInfo: VideoPublishInfo) => {
   console.log({ publishInfo });
-  const result: VideoPublishResult[] = [];
+  let result: VideoPublishResult[] = [];
   const { account, ...info } = publishInfo;
   for (const item of account) {
     result.push(await handlePublish(item, info));
   }
+  // await Promise.all(
+  //   account.map((item) => {
+  //     return handlePublish(item, info);
+  //   }),
+  // ).then((val) => {
+  //   // console.log(val, '--result');
+  //   result = val;
+  // });
   return result;
 });
 
@@ -167,7 +175,7 @@ function usePublish(config: PublishConfig, log: any[]) {
       throw new Error('file input error');
     }
     log.push('publish content input done all');
-    const stop = tryPublishClick(10); // 等待10分钟
+    const stop = tryPublishClick(); // 等待10分钟
 
     log.push('waiting publish');
     try {
@@ -196,7 +204,6 @@ function usePublish(config: PublishConfig, log: any[]) {
     let _timer = setInterval(async () => {
       try {
         await submit(page);
-        console.log('click su');
       } catch (err) {
         console.log('click err');
       }

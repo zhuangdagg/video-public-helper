@@ -36,11 +36,15 @@ const columns: BasicColumn[] = [
     //   return (PlationNames as any)[text] || '';
     // },
     customRender: (row) => {
-      return h(Avatar, {
-        src: PlationLogos[row.value],
-        shape: 'square',
-        title: PlationNames[row.value] || '',
-      });
+      return h(
+        Avatar,
+        {
+          src: PlationLogos[row.value],
+          shape: 'square',
+          title: PlationNames[row.value] || '',
+        },
+        () => undefined,
+      );
     },
   },
   {
@@ -57,7 +61,7 @@ const columns: BasicColumn[] = [
           bordered: false,
           color: row.value === 'success' ? 'green' : 'red',
         },
-        row.value === 'success' ? '发布成功' : '发布失败',
+        () => (row.value === 'success' ? '发布成功' : '发布失败'),
       );
     },
   },
